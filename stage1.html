@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HTML nền tảng: giáo trình, trắc nghiệm và bài tập vận dụng</title>
+<meta name="description" content="Giai đoạn 1 của lộ trình HTML và CSS: lý thuyết, ví dụ chạy thử, câu hỏi trắc nghiệm và bài tập vận dụng có chấm tự động.">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;800&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F7FB; --surface:#FFFFFF; --ink:#1B2433; --muted:#556178; --line:#D9E0EC;
+  --accent:#3346D6; --accent-ink:#FFFFFF; --accent-soft:#E6E9FB;
+  --hl:#FFE45C; --hl-soft:#FFF4B0;
+  --ok:#16794C; --ok-bg:#E3F4EB; --bad:#B3302E; --bad-bg:#FBE7E6;
+  --code-bg:#101B34; --code-ink:#DCE6F8; --code-line:#22304F; --code-mute:#9FB0D0;
+  --c-tag:#8FB8FF; --c-attr:#FFCB6B; --c-str:#A6E3A1; --c-com:#8593AE; --c-doc:#C9A6FF;
+  --chrome:#DDE3F0; --chrome-ink:#3A465F;
+  --font-ui:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-read:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --font-code:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1424; --surface:#141D33; --ink:#E6ECF8; --muted:#9AA7C0; --line:#26314D;
+    --accent:#8FA2FF; --accent-ink:#0D1424; --accent-soft:#1E2A52;
+    --hl:#FFE45C; --hl-soft:#3A3610;
+    --ok:#5FD39A; --ok-bg:#0F2A20; --bad:#FF8A87; --bad-bg:#331616;
+    --code-bg:#0A1122; --code-line:#1B2743;
+    --chrome:#1E2942; --chrome-ink:#B7C3DD;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1424; --surface:#141D33; --ink:#E6ECF8; --muted:#9AA7C0; --line:#26314D;
+  --accent:#8FA2FF; --accent-ink:#0D1424; --accent-soft:#1E2A52;
+  --hl:#FFE45C; --hl-soft:#3A3610;
+  --ok:#5FD39A; --ok-bg:#0F2A20; --bad:#FF8A87; --bad-bg:#331616;
+  --code-bg:#0A1122; --code-line:#1B2743;
+  --chrome:#1E2942; --chrome-ink:#B7C3DD;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 12px);scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.075rem/1.75 var(--font-read)}
+a{color:var(--accent);text-underline-offset:.18em}
+h1,h2,h3,h4{font-family:var(--font-ui);line-height:1.2;letter-spacing:-.01em;margin:0}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.skip{position:absolute;left:-9999px;top:8px;z-index:60;background:var(--accent);color:var(--accent-ink);padding:8px 14px;border-radius:8px;font-family:var(--font-ui)}
+.skip:focus{left:12px}
+
+/* layout */
+.shell{display:grid;grid-template-columns:minmax(0,1fr);max-width:1200px;margin:0 auto;padding:0 20px 140px}
+@media(min-width:1000px){.shell{grid-template-columns:250px minmax(0,1fr);column-gap:56px;padding:0 32px 140px}}
+main{min-width:0;max-width:800px}
+.toc{display:none}
+@media(min-width:1000px){
+  .toc{display:block;position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px);align-self:start;max-height:calc(100vh - 40px);overflow:auto;padding:28px 0;font-family:var(--font-ui);font-size:.86rem}
+}
+.toc-title{margin:0 0 10px;font-weight:600;color:var(--muted)}
+.toc ol,.toc-m ol{list-style:none;margin:0;padding:0}
+.toc a,.toc-m a{display:flex;gap:8px;padding:5px 10px;border-left:2px solid var(--line);color:var(--muted);text-decoration:none;line-height:1.35}
+.toc a:hover,.toc-m a:hover{color:var(--ink)}
+.toc a.cur,.toc-m a.cur{border-left-color:var(--accent);color:var(--ink);font-weight:600}
+.toc .n,.toc-m .n{flex:none;width:1.4rem;color:var(--accent);font-weight:600}
+.toc-m{margin:20px 0 0;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-family:var(--font-ui);font-size:.9rem}
+.toc-m summary{cursor:pointer;padding:12px 16px;font-weight:600}
+.toc-m ol{padding:0 8px 12px}
+@media(min-width:1000px){.toc-m{display:none}}
+
+/* hero */
+.hero{padding:clamp(28px,6vw,72px) 0 0}
+.hero h1{font:800 clamp(2.6rem,7.5vw,4.8rem)/1 var(--font-ui);letter-spacing:-.035em}
+.lead{font-size:1.2rem;line-height:1.6;color:var(--muted);max-width:52ch;margin:1.1rem 0 1.4rem}
+.cap{font-size:.95rem;color:var(--muted);max-width:64ch;margin:.2rem 0 0}
+
+/* sections */
+.chapter,.part{padding-top:76px}
+.ch-head{display:flex;align-items:baseline;gap:14px}
+.ch-no{flex:none;min-width:1.1ch;font:300 clamp(2.2rem,5vw,3.2rem)/1 var(--font-ui);color:var(--accent)}
+.chapter h2,.part h2{font-size:clamp(1.6rem,3.6vw,2.25rem);font-weight:700}
+.chapter h3,.part h3{font-size:1.18rem;font-weight:600;margin:2.2rem 0 .4rem}
+.ch-head{margin-bottom:.2rem}
+.part h2{margin-bottom:.9rem}
+.ex-body>p strong{font-family:var(--font-ui)}
+.tags{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:.6rem 0 1.4rem;font:.86rem var(--font-ui);color:var(--muted)}
+.chapter p,.chapter li,.part p,.part li{max-width:68ch}
+p{margin:0 0 1rem}
+ul,ol{padding-left:1.3rem;margin:0 0 1rem}
+li{margin:.25rem 0}
+code{font-family:var(--font-code);font-size:.86em;background:var(--accent-soft);color:var(--ink);padding:.1em .38em;border-radius:5px;overflow-wrap:anywhere}
+.note,.warn,.tip{max-width:68ch;margin:1.3rem 0;padding:.85rem 1.1rem;border-left:4px solid var(--accent);background:var(--surface);font-size:.99rem}
+.note{border-left-color:var(--accent)}
+.warn{border-left-color:var(--bad);background:var(--bad-bg)}
+.tip{border-left-color:var(--ok);background:var(--ok-bg)}
+.note>:last-child,.warn>:last-child,.tip>:last-child{margin-bottom:0}
+.note strong,.warn strong,.tip strong{font-family:var(--font-ui);font-weight:600}
+.tbl{overflow-x:auto;margin:1.2rem 0}
+table{border-collapse:collapse;width:100%;font:.92rem/1.5 var(--font-ui)}
+th,td{padding:.6rem .8rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-weight:600;color:var(--muted);border-bottom:2px solid var(--line);white-space:nowrap}
+td code{white-space:nowrap}
+.steps{counter-reset:s;list-style:none;padding:0}
+.steps li{counter-increment:s;position:relative;padding-left:2.4rem;margin:.8rem 0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:.05rem;width:1.7rem;height:1.7rem;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font:600 .82rem var(--font-ui)}
+
+/* anatomy */
+.anat{display:flex;flex-wrap:wrap;margin:1.4rem 0}
+.anat .col{display:flex;flex-direction:column}
+.anat b{font:600 clamp(1.05rem,4vw,1.9rem)/1.3 var(--font-code);padding:4px 1px;white-space:pre}
+.anat i{display:block;height:6px;border-radius:3px}
+.anat span{padding-top:6px;font:500 .82rem var(--font-ui);color:var(--muted)}
+.anat .k1 i{background:var(--accent)}
+.anat .k2 i{background:var(--hl)}
+.anat .k3 i{background:var(--ok)}
+.anat .k4 i{background:var(--bad)}
+
+/* static code */
+.codeblock{margin:1.2rem 0;border-radius:10px;overflow:hidden;background:var(--code-bg)}
+.cb-bar{display:flex;justify-content:space-between;align-items:center;padding:6px 10px 6px 14px;font:500 .78rem var(--font-ui);color:var(--code-mute);border-bottom:1px solid var(--code-line)}
+.codeblock pre{margin:0;padding:14px;overflow:auto;color:var(--code-ink);font:400 .86rem/1.65 var(--font-code);tab-size:2}
+.codeblock figcaption{padding:8px 14px;font:.82rem var(--font-ui);color:var(--code-mute);border-top:1px solid var(--code-line)}
+.t-tag{color:var(--c-tag)}.t-attr{color:var(--c-attr)}.t-str{color:var(--c-str)}.t-com{color:var(--c-com);font-style:italic}.t-doc{color:var(--c-doc)}
+.mini{font:500 .75rem var(--font-ui);padding:3px 9px;border-radius:6px;border:1px solid currentColor;background:transparent;color:inherit;cursor:pointer}
+.mini:hover{color:var(--hl)}
+
+/* try-it sandbox */
+.try{display:grid;grid-template-columns:minmax(0,1fr);margin:1.4rem 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+@media(min-width:720px){.try{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.try-pane{display:flex;flex-direction:column;min-width:0}
+.pane-head{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:2.4rem;padding:6px 12px;font:500 .8rem var(--font-ui);color:var(--muted);border-bottom:1px solid var(--line)}
+.try-edit{background:var(--code-bg)}
+.try-edit .pane-head{color:var(--code-mute);border-bottom-color:var(--code-line)}
+.ed{flex:1;display:block;width:100%;min-height:var(--h);margin:0;padding:12px 14px;border:0;border-radius:0;background:transparent;color:var(--code-ink);font:400 .86rem/1.6 var(--font-code);resize:vertical;tab-size:2;white-space:pre;overflow:auto}
+.ed:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.browser{display:flex;flex-direction:column;flex:1;background:var(--chrome)}
+.bar{display:flex;padding:8px 10px 0}
+.tab{display:flex;align-items:center;gap:8px;min-width:0;max-width:100%;padding:6px 12px;border-radius:8px 8px 0 0;background:#fff;color:#1B2433;font:500 .78rem var(--font-ui)}
+.tab .ttl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tab .ttl.none{color:#6F7A92;font-style:italic}
+.fav{flex:none;width:16px;height:16px;border-radius:4px}
+.fav img{display:block;width:16px;height:16px}
+.fav.globe{border:1.5px solid #8A94AA;border-radius:50%;background:linear-gradient(#8A94AA,#8A94AA) center/100% 1.5px no-repeat,linear-gradient(#8A94AA,#8A94AA) center/1.5px 100% no-repeat}
+.fav.custom{background:var(--accent)}
+.host{height:var(--h);overflow:auto;background:#fff}
+.status{min-height:1.6rem;padding:3px 10px;font:.74rem/1.5 var(--font-ui);color:var(--chrome-ink);background:var(--chrome);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* color mixer */
+.mixer{display:grid;gap:18px;margin:1.4rem 0;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-family:var(--font-ui)}
+@media(min-width:720px){.mixer{grid-template-columns:200px minmax(0,1fr)}}
+.mx-sw{min-height:120px;border-radius:10px;border:1px solid var(--line)}
+.mx-ctl{display:grid;gap:8px;font-size:.9rem}
+.mx-ctl label{display:grid;grid-template-columns:7rem minmax(0,1fr) 2.6rem;gap:10px;align-items:center}
+.mx-ctl input{width:100%;accent-color:var(--accent)}
+.mx-out{grid-column:1/-1;display:grid;gap:6px;margin:0;font-size:.9rem}
+@media(min-width:720px){.mx-out{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.mx-out div{padding:8px 10px;border-radius:8px;background:var(--accent-soft)}
+.mx-out dt{color:var(--muted);font-size:.78rem}
+.mx-out dd{margin:0;font:600 .9rem var(--font-code);overflow-wrap:anywhere}
+
+/* quiz */
+.q-group{margin:2.4rem 0 .2rem;font-size:1.05rem;color:var(--accent)}
+.q{padding:1.3rem 0;border-top:1px solid var(--line)}
+.q-text{max-width:64ch;margin:0 0 .9rem;font:600 1.02rem/1.55 var(--font-ui)}
+.q-no{margin-right:.5rem;color:var(--muted);font-weight:500}
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:12px;width:100%;padding:.7rem .9rem;text-align:left;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:400 .98rem/1.5 var(--font-read);cursor:pointer}
+.opt .k{flex:none;display:grid;place-items:center;width:1.7rem;height:1.7rem;border-radius:50%;background:var(--accent-soft);color:var(--accent);font:600 .8rem var(--font-ui)}
+.opt .ot{flex:1;min-width:0}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default;color:var(--ink)}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt .mark{flex:none;font:600 .8rem var(--font-ui)}
+.opt.right .mark{color:var(--ok)}
+.opt.wrong .mark{color:var(--bad)}
+.q-exp{margin-top:.8rem;padding:.75rem 1rem;border-left:4px solid var(--accent);background:var(--surface);font-size:.98rem;max-width:68ch}
+.q-exp[hidden]{display:none}
+.summary{margin:2rem 0;padding:1.2rem 1.4rem;border:2px solid var(--accent);border-radius:12px;background:var(--surface);font-family:var(--font-ui)}
+.summary h3{margin:0 0 .4rem}
+.scorebar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:40;transform:translateX(-50%);display:none;align-items:center;gap:14px;padding:9px 18px;border-radius:999px;background:var(--ink);color:var(--bg);font:500 .88rem var(--font-ui);box-shadow:0 6px 24px rgba(0,0,0,.25);white-space:nowrap}
+.scorebar.show{display:flex}
+.btn{padding:.55rem 1.05rem;border:1.5px solid var(--accent);border-radius:8px;background:transparent;color:var(--accent);font:600 .9rem var(--font-ui);cursor:pointer}
+.btn:hover{background:var(--accent-soft)}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.08)}
+
+/* exercises */
+.ex{margin:2.4rem 0;border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.ex-head{padding:1.1rem 1.3rem .2rem}
+.ex-head h3{margin:0;font-size:1.2rem}
+.ex-no{margin-right:.6rem;color:var(--accent)}
+.ex-ch{margin:.2rem 0 0;font:.85rem var(--font-ui);color:var(--muted)}
+.ex-body{padding:0 1.3rem 1.3rem}
+.ex-body .try{margin:1rem 0}
+.ex-brief p,.ex-brief li{max-width:none}
+.ex-files{font:.88rem var(--font-ui);color:var(--muted)}
+.checks{display:grid;gap:5px;margin:.4rem 0 0;padding:0;list-style:none;font:.93rem/1.5 var(--font-ui)}
+.checks li{display:flex;gap:10px;max-width:none;margin:0}
+.checks .ck{flex:none;width:1.3rem;text-align:center;font-weight:700;color:var(--muted)}
+.checks li.ok .ck{color:var(--ok)}
+.checks li.no .ck{color:var(--bad)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:1rem}
+.result{min-height:1.4rem;margin:.9rem 0 0;font:600 .95rem var(--font-ui)}
+.result.done{color:var(--ok)}
+details.sol{margin-top:.9rem}
+details.sol>summary{cursor:pointer;font:600 .92rem var(--font-ui);color:var(--accent)}
+.sol-body{margin-top:.6rem}
+.hint{margin-top:.9rem;padding:.7rem 1rem;border-left:4px solid var(--hl);background:var(--hl-soft);font-size:.96rem;max-width:68ch}
+.hint[hidden]{display:none}
+.progress{margin:.4rem 0 1.4rem;font:600 .95rem var(--font-ui);color:var(--muted)}
+.foot{margin-top:5rem;padding-top:2rem;border-top:1px solid var(--line);font:.9rem/1.7 var(--font-ui);color:var(--muted)}
+.links{columns:2 260px;column-gap:32px;padding:0;list-style:none;font:.92rem var(--font-ui)}
+.links li{break-inside:avoid;max-width:none}
+
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+@media print{.toc,.toc-m,.scorebar{display:none!important}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Bỏ qua mục lục</a>
+<div id="hocosBar" style="position:sticky;top:env(safe-area-inset-top,0);z-index:40;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 18px;background:var(--surface);border-bottom:1px solid var(--line);font:500 .85rem var(--font-ui,sans-serif);color:var(--muted)">
+<a data-nav href="https://claude.ai/artifact/D8wS3zGcy5E53XYhR4JxGj" style="font-weight:800;color:var(--ink);text-decoration:none">🖥️ HocOS</a><span style="opacity:.5">›</span><a data-nav href="https://claude.ai/artifact/Gq5CKmfD3EU7AAmkb9f7hR" style="color:var(--muted);text-decoration:none;font-weight:600">📁 Học HTML</a><span style="opacity:.5">›</span><span style="color:var(--ink);font-weight:700">Giai đoạn 1</span>
+  <span id="hocosClock" style="margin-left:auto;font-family:var(--font-code,monospace);color:var(--ink)"></span>
+  <button id="hocosThemeBtn" title="Đổi giao diện sáng/tối" style="border:1px solid var(--line);background:var(--surface);color:var(--ink);width:2rem;height:2rem;border-radius:8px;cursor:pointer;font-size:.9rem">🌗</button>
+  <button id="hocosCmdBtn" title="Tìm nhanh (Ctrl K)" style="border:1px solid var(--line);background:var(--surface);color:var(--ink);width:2rem;height:2rem;border-radius:8px;cursor:pointer;font-size:.9rem">⌘</button>
+</div>
+<div id="hocosCmdOverlay" style="position:fixed;inset:0;background:rgba(10,15,30,.55);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;padding-top:12vh;z-index:999">
+  <div style="width:min(560px,92vw);background:var(--surface);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);border:1px solid var(--line)">
+    <input id="hocosCmdInput" placeholder="Gõ tên bài học, giai đoạn hoặc môn học…" style="width:100%;box-sizing:border-box;border:0;padding:16px 18px;font:500 1rem var(--font-ui,sans-serif);background:transparent;color:var(--ink);outline:none;border-bottom:1px solid var(--line)">
+    <div id="hocosCmdList" style="max-height:50vh;overflow:auto;padding:6px"></div>
+  </div>
+</div><script>
+(function(){
+var g=function(k){try{return localStorage.getItem(k)}catch(e){return null}};
+var s=function(k,v){try{localStorage.setItem(k,v)}catch(e){}};
+var qs=new URLSearchParams(location.search);
+if(qs.get('theme')!==null) s('hocos:theme', qs.get('theme'));
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t||'')}
+applyTheme(g('hocos:theme'));
+function withTheme(url){
+  var t=g('hocos:theme'); if(t===null||t==='') return url;
+  var hashIdx=url.indexOf('#'); var base=hashIdx>-1?url.slice(0,hashIdx):url; var hash=hashIdx>-1?url.slice(hashIdx):'';
+  var sep= base.indexOf('?')>-1 ? '&':'?';
+  return base+sep+'theme='+encodeURIComponent(t)+hash;
+}
+function syncLinks(){document.querySelectorAll('a[data-nav]').forEach(function(a){if(!a.dataset.orig) a.dataset.orig=a.getAttribute('href'); a.setAttribute('href', withTheme(a.dataset.orig))})}
+syncLinks();
+document.getElementById('hocosThemeBtn').onclick=function(){
+  var cur=g('hocos:theme'); var next= cur==='dark'?'light':(cur==='light'?'':'dark');
+  s('hocos:theme',next); applyTheme(next); syncLinks();
+};
+function tick(){var el=document.getElementById('hocosClock'); if(el) el.textContent=new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})}
+tick(); setInterval(tick,15000);
+
+var DIR = [{"label": "🖥️ Trang chủ HocOS", "url": "https://claude.ai/artifact/D8wS3zGcy5E53XYhR4JxGj", "tag": "HỆ THỐNG"}, {"label": "📁 Học HTML (môn học)", "url": "https://claude.ai/artifact/Gq5CKmfD3EU7AAmkb9f7hR", "tag": "MÔN HỌC"}, {"label": "Giai đoạn 1 — HTML nền tảng", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9", "tag": "HTML"}, {"label": "Giai đoạn 2 — HTML nâng cao", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg", "tag": "HTML"}, {"label": "HTML là gì và công cụ", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c1", "tag": "G1"}, {"label": "Cấu trúc trang HTML cơ bản", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c2", "tag": "G1"}, {"label": "Phần tử HTML", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c3", "tag": "G1"}, {"label": "Thuộc tính HTML", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c4", "tag": "G1"}, {"label": "Tiêu đề", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c5", "tag": "G1"}, {"label": "Đoạn văn", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c6", "tag": "G1"}, {"label": "Thuộc tính style", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c7", "tag": "G1"}, {"label": "Định dạng văn bản", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c8", "tag": "G1"}, {"label": "Trích dẫn và viết tắt", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c9", "tag": "G1"}, {"label": "Chú thích", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c10", "tag": "G1"}, {"label": "Màu sắc", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c11", "tag": "G1"}, {"label": "CSS trong HTML", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c12", "tag": "G1"}, {"label": "Liên kết", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c13", "tag": "G1"}, {"label": "Hình ảnh", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c14", "tag": "G1"}, {"label": "Favicon", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c15", "tag": "G1"}, {"label": "Tiêu đề trang", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c16", "tag": "G1"}, {"label": "Tổng kết và tra cứu nhanh", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c17", "tag": "G1"}, {"label": "Trắc nghiệm — Giai đoạn 1", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#quiz", "tag": "G1"}, {"label": "Bài tập vận dụng — Giai đoạn 1", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#bai-tap", "tag": "G1"}, {"label": "Bảng", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c1", "tag": "G2"}, {"label": "Danh sách", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c2", "tag": "G2"}, {"label": "Phần tử block & inline", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c3", "tag": "G2"}, {"label": "Thẻ div", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c4", "tag": "G2"}, {"label": "Lớp (class)", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c5", "tag": "G2"}, {"label": "Định danh (id)", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c6", "tag": "G2"}, {"label": "Nút bấm", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c7", "tag": "G2"}, {"label": "Khung nhúng iframe", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c8", "tag": "G2"}, {"label": "Đường dẫn file", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c9", "tag": "G2"}, {"label": "Phần head", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c10", "tag": "G2"}, {"label": "Bố cục trang", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c11", "tag": "G2"}, {"label": "Thiết kế đáp ứng", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c12", "tag": "G2"}, {"label": "Thẻ ngữ nghĩa", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c13", "tag": "G2"}, {"label": "Quy ước viết code", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c14", "tag": "G2"}, {"label": "Ký tự đặc biệt", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c15", "tag": "G2"}, {"label": "Bảng mã ký tự", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c16", "tag": "G2"}, {"label": "Biểu mẫu", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c17", "tag": "G2"}, {"label": "Thuộc tính của form", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c18", "tag": "G2"}, {"label": "Các phần tử trong form", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c19", "tag": "G2"}, {"label": "Các loại input", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c20", "tag": "G2"}, {"label": "Thuộc tính của input", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c21", "tag": "G2"}, {"label": "Dự án: Trang CV", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c22", "tag": "G2"}, {"label": "Trắc nghiệm — Giai đoạn 2", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#quiz", "tag": "G2"}, {"label": "Bài tập vận dụng — Giai đoạn 2", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#bai-tap", "tag": "G2"}];
+var ov=document.getElementById('hocosCmdOverlay'), inp=document.getElementById('hocosCmdInput'), list=document.getElementById('hocosCmdList');
+function openCmd(){ov.style.display='flex'; inp.value=''; render(DIR); inp.focus()}
+function closeCmd(){ov.style.display='none'}
+function render(arr){ list.innerHTML= arr.slice(0,40).map(function(x,k){return '<div class="hocos-ci" data-url="'+withTheme(x.url)+'" style="display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:.92rem;'+(k===0?'background:var(--accent-soft);':'')+'"><span>'+x.label+'</span><span style="color:var(--muted);font:600 .72rem var(--font-code,monospace)">'+x.tag+'</span></div>'}).join('') || '<div style="padding:10px">Không tìm thấy</div>';}
+inp.addEventListener('input',function(){var q=inp.value.trim().toLowerCase(); render(!q?DIR:DIR.filter(function(x){return x.label.toLowerCase().indexOf(q)>-1}))});
+list.addEventListener('click',function(e){var it=e.target.closest('[data-url]'); if(it) location.href=it.getAttribute('data-url')});
+document.getElementById('hocosCmdBtn').onclick=openCmd;
+ov.addEventListener('click',function(e){if(e.target===ov) closeCmd()});
+document.addEventListener('keydown',function(e){
+ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault(); ov.style.display==='flex'?closeCmd():openCmd()}
+ if(e.key==='Escape') closeCmd();
+});
+})();
+</script>
+<div class="shell">
+<nav class="toc" aria-label="Mục lục">
+  <p class="toc-title">Mục lục</p>
+  <ol id="tocList"></ol>
+</nav>
+<main id="main">
+
+<header class="hero">
+  <h1>HTML nền tảng</h1>
+  <p class="lead">Giai đoạn 1 của lộ trình học HTML và CSS. Hai tuần, 17 bài học, <span data-count="quiz">48</span> câu trắc nghiệm và <span data-count="ex">8</span> bài tập chạy thử ngay trong trang.</p>
+<script type="text/plain" class="try" data-h="150">
+<h1>Xin chào, web!</h1>
+<p>Sửa chữ ở khung bên trái, kết quả đổi ngay.</p>
+</script>
+  <p class="cap">Đây là toàn bộ điều kỳ diệu của HTML: bạn gõ thẻ, trình duyệt vẽ ra trang. Mọi khung mã trong tài liệu này đều sửa được, hãy nghịch thoải mái.</p>
+  <p class="progress" id="allProg"></p>
+  <details class="toc-m"><summary>Mục lục</summary><ol id="tocListM"></ol></details>
+</header>
+
+<section class="part" id="huong-dan" data-toc="Cách dùng tài liệu">
+  <h2>Cách dùng tài liệu này</h2>
+  <p>Sau giai đoạn này bạn sẽ tự viết được một trang HTML hoàn chỉnh: đúng cấu trúc chuẩn, có tiêu đề, đoạn văn, định dạng chữ, màu sắc cơ bản, liên kết, hình ảnh, biểu tượng tab và tiêu đề trang. Nội dung bám theo các chương HTML cơ bản của w3schools (từ Introduction đến Page Title), được sắp xếp lại và viết lại bằng tiếng Việt.</p>
+  <p>Mỗi bài học có ba phần: lý thuyết ngắn, ví dụ chạy thử ngay trong trang (sửa mã, xem kết quả), và lỗi thường gặp. Cuối tài liệu là phần trắc nghiệm và bài tập vận dụng có kiểm tra tự động. Nên học theo nhịp dưới đây, mỗi buổi khoảng 1,5 đến 2 giờ.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Buổi</th><th>Bài học</th><th>Việc cần làm</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Bài 1</td><td>Cài VS Code, tạo tệp <code>index.html</code> đầu tiên</td></tr>
+      <tr><td>2</td><td>Bài 2 và 3</td><td>Bài tập 1 (sửa trang lỗi)</td></tr>
+      <tr><td>3</td><td>Bài 4 và 5</td><td>Bài tập 2 (tiêu đề và đoạn văn)</td></tr>
+      <tr><td>4</td><td>Bài 6 và 7</td><td>Làm lại các ví dụ, tự đặt câu hỏi "nếu đổi thì sao"</td></tr>
+      <tr><td>5</td><td>Bài 8 và 9</td><td>Bài tập 3 (định dạng), bài tập 7 (trích dẫn)</td></tr>
+      <tr><td>6</td><td>Bài 10 và 11</td><td>Bài tập 4 (style và màu)</td></tr>
+      <tr><td>7</td><td>Bài 12</td><td>Trắc nghiệm các nhóm 1 đến 5</td></tr>
+      <tr><td>8</td><td>Bài 13</td><td>Bài tập 5 (liên kết)</td></tr>
+      <tr><td>9</td><td>Bài 14 đến 16</td><td>Bài tập 6 (hình ảnh)</td></tr>
+      <tr><td>10</td><td>Bài 17</td><td>Trắc nghiệm nhóm 6, bài tập 8 (dự án tổng hợp)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note"><strong>Mẹo học.</strong> Đừng chép mã, hãy gõ lại. Gõ sai rồi tự tìm lỗi là cách nhanh nhất để nhớ. Khi đọc xong một bài, đóng trang và thử viết lại ví dụ từ trí nhớ.</p>
+</section>
+
+<section class="chapter" id="c1" data-toc="HTML là gì và công cụ" data-no="1">
+  <div class="ch-head"><span class="ch-no">1</span><h2>HTML là gì và chuẩn bị công cụ</h2></div>
+  <p class="tags">Tương ứng w3schools: Introduction, Editors</p>
+
+  <p>HTML (HyperText Markup Language) là ngôn ngữ đánh dấu chuẩn để tạo trang web. Bạn không "lập trình" bằng HTML. Bạn dùng các <strong>thẻ</strong> (tag) để gắn nhãn cho từng phần nội dung: đây là tiêu đề, đây là đoạn văn, đây là ảnh, đây là liên kết. Trình duyệt đọc các nhãn đó rồi dựng thành trang bạn nhìn thấy.</p>
+
+  <h3>HTML, CSS và JavaScript</h3>
+  <p>Một trang web hiện đại được ghép từ ba lớp, mỗi lớp lo một việc:</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Lớp</th><th>Vai trò</th><th>Ví dụ với một ngôi nhà</th></tr></thead>
+    <tbody>
+      <tr><td>HTML</td><td>Cấu trúc và nội dung</td><td>Khung nhà, tường, cửa, phòng</td></tr>
+      <tr><td>CSS</td><td>Giao diện: màu sắc, phông chữ, bố cục</td><td>Sơn tường, nội thất, cách bố trí</td></tr>
+      <tr><td>JavaScript</td><td>Hành vi và tương tác</td><td>Công tắc đèn, cửa tự động</td></tr>
+    </tbody>
+  </table></div>
+  <p>Vì HTML không có biến, điều kiện hay vòng lặp nên nó không phải ngôn ngữ lập trình. Điều đó là tin vui: bạn có thể làm ra sản phẩm thật chỉ sau vài buổi học. Hiện nay HTML là một chuẩn "sống" liên tục được cập nhật, thường gọi chung là HTML5.</p>
+
+  <h3>Trình duyệt làm gì với tệp HTML?</h3>
+  <ol class="steps">
+    <li>Tải tệp <code>.html</code> từ máy chủ (hoặc mở từ máy của bạn).</li>
+    <li>Đọc từng thẻ và dựng thành một cây phần tử gọi là <strong>DOM</strong>.</li>
+    <li>Vẽ cây đó lên màn hình. Thẻ không hiện ra, chỉ có nội dung và kết quả của chúng hiện ra.</li>
+  </ol>
+
+  <h3>Công cụ cần có</h3>
+  <ul>
+    <li><strong>Trình duyệt</strong>: Chrome, Edge hoặc Firefox. Dùng luôn công cụ dành cho nhà phát triển (phím <code>F12</code>).</li>
+    <li><strong>Trình soạn mã</strong>: Visual Studio Code (miễn phí, khuyên dùng). Cài thêm tiện ích <em>Live Server</em> để trang tự tải lại mỗi khi bạn lưu. Notepad vẫn làm được nhưng sẽ rất vất vả.</li>
+  </ul>
+  <p>Quy trình làm việc gồm bốn bước lặp lại mãi mãi:</p>
+  <ol class="steps">
+    <li>Tạo một thư mục, ví dụ <code>hoc-html</code>, rồi tạo tệp <code>index.html</code> trong đó.</li>
+    <li>Viết mã HTML vào tệp.</li>
+    <li>Lưu tệp (<code>Ctrl + S</code>), luôn ở dạng mã hoá UTF-8.</li>
+    <li>Mở tệp bằng trình duyệt (nháy đúp, hoặc chuột phải chọn <em>Open with Live Server</em>). Sửa mã, lưu, tải lại trang (<code>F5</code>).</li>
+  </ol>
+<script type="text/plain" class="code" data-lang="text" data-cap="Cấu trúc thư mục gợi ý cho những bài đầu tiên">
+hoc-html/
+  index.html
+  anh/
+    avatar.jpg
+</script>
+  <p class="note"><strong>Quy tắc đặt tên tệp.</strong> Dùng chữ thường, không dấu, không khoảng trắng, nối bằng dấu gạch ngang: <code>trang-chu.html</code>, không phải <code>Trang chủ.html</code>. Tên <code>index.html</code> đặc biệt: máy chủ web tự mở nó khi bạn truy cập một thư mục.</p>
+  <p class="tip"><strong>Xem "hậu trường" của mọi trang web.</strong> Trên bất kỳ trang nào, nhấn <code>Ctrl + U</code> để xem mã nguồn, hoặc chuột phải chọn <em>Inspect</em> để xem và thử sửa HTML, CSS ngay trong trình duyệt. Việc sửa chỉ xảy ra trên máy bạn và mất khi tải lại, nên rất an toàn để tò mò.</p>
+</section>
+
+<section class="chapter" id="c2" data-toc="Cấu trúc trang HTML cơ bản" data-no="2">
+  <div class="ch-head"><span class="ch-no">2</span><h2>Cấu trúc một trang HTML</h2></div>
+  <p class="tags">Thẻ trong bài: <code>&lt;!DOCTYPE&gt;</code> <code>&lt;html&gt;</code> <code>&lt;head&gt;</code> <code>&lt;meta&gt;</code> <code>&lt;title&gt;</code> <code>&lt;body&gt;</code></p>
+
+  <p>Mọi trang HTML đều bắt đầu từ cùng một bộ khung. Hãy thuộc lòng nó, vì bạn sẽ gõ nó hàng trăm lần.</p>
+<script type="text/plain" class="try" data-h="250">
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trang đầu tiên của tôi</title>
+</head>
+<body>
+  <h1>Xin chào!</h1>
+  <p>Đây là đoạn văn đầu tiên.</p>
+</body>
+</html>
+</script>
+  <p>Chú ý tab phía trên khung kết quả: nó đang hiển thị nội dung của thẻ <code>&lt;title&gt;</code>. Xoá thẻ đó đi và xem điều gì xảy ra.</p>
+
+  <h3>Từng dòng có nghĩa gì</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Dòng</th><th>Ý nghĩa</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;!DOCTYPE html&gt;</code></td><td>Cho trình duyệt biết đây là tài liệu HTML5. Phải nằm ở dòng đầu tiên, chỉ một lần.</td></tr>
+      <tr><td><code>&lt;html lang="vi"&gt;</code></td><td>Phần tử gốc, bao bọc toàn bộ trang. <code>lang="vi"</code> khai báo nội dung là tiếng Việt để trình đọc màn hình, công cụ dịch và tìm kiếm xử lý đúng.</td></tr>
+      <tr><td><code>&lt;head&gt;</code></td><td>Thông tin về trang, không hiển thị trong vùng nội dung: tiêu đề, bảng mã, biểu tượng, liên kết CSS.</td></tr>
+      <tr><td><code>&lt;meta charset="UTF-8"&gt;</code></td><td>Khai báo bảng mã ký tự để tiếng Việt có dấu hiển thị đúng. Đặt ngay đầu <code>&lt;head&gt;</code>.</td></tr>
+      <tr><td><code>&lt;meta name="viewport" ...&gt;</code></td><td>Giúp trang hiển thị đúng kích thước trên điện thoại. Bạn sẽ hiểu kỹ ở phần Responsive, bây giờ cứ đặt sẵn.</td></tr>
+      <tr><td><code>&lt;title&gt;</code></td><td>Tiêu đề hiện trên tab trình duyệt và trong kết quả tìm kiếm.</td></tr>
+      <tr><td><code>&lt;body&gt;</code></td><td>Toàn bộ nội dung nhìn thấy được của trang.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Làm quen với bốn phần tử đầu tiên</h3>
+  <p>Bốn thẻ dưới đây đủ để dựng một trang đơn giản. Mỗi thẻ sẽ có một bài riêng ở phần sau.</p>
+<script type="text/plain" class="try" data-h="220">
+<h1>Tiêu đề chính</h1>
+<p>Một đoạn văn.</p>
+<p><a href="https://example.com">Một liên kết</a></p>
+<img src="avatar.svg" alt="Ảnh đại diện" width="80" height="80">
+</script>
+  <p class="note"><strong>Khung ảnh có sẵn.</strong> Trong mọi khung xem trước của tài liệu này đã nạp sẵn ba tệp mẫu: <code>avatar.svg</code>, <code>mountain.svg</code> và <code>favicon.svg</code>. Bạn có thể dùng chúng như những tệp nằm cạnh trang HTML của mình.</p>
+  <p class="warn"><strong>Lỗi thường gặp.</strong> Thiếu <code>&lt;meta charset="UTF-8"&gt;</code> khiến chữ "Việt" hiện thành "Viá»‡t". Đặt nội dung ngoài <code>&lt;body&gt;</code> cũng là lỗi. Trình duyệt thường tự sửa giúp, nhưng đừng dựa vào điều đó.</p>
+</section>
+
+<section class="chapter" id="c3" data-toc="Phần tử HTML" data-no="3">
+  <div class="ch-head"><span class="ch-no">3</span><h2>Phần tử HTML</h2></div>
+  <p class="tags">Thẻ trong bài: <code>&lt;p&gt;</code> <code>&lt;br&gt;</code> <code>&lt;hr&gt;</code> <code>&lt;strong&gt;</code> <code>&lt;em&gt;</code></p>
+
+  <p>Một <strong>phần tử</strong> (element) HTML gồm ba thành phần: thẻ mở, nội dung và thẻ đóng.</p>
+  <div class="anat" role="img" aria-label="Phần tử p gồm thẻ mở p, nội dung Xin chào và thẻ đóng p">
+    <div class="col k1"><b>&lt;p&gt;</b><i></i><span>thẻ mở</span></div>
+    <div class="col k2"><b>Xin chào</b><i></i><span>nội dung</span></div>
+    <div class="col k1"><b>&lt;/p&gt;</b><i></i><span>thẻ đóng</span></div>
+  </div>
+  <p>Thẻ đóng giống thẻ mở nhưng có thêm dấu gạch chéo <code>/</code>. Tên thẻ viết bằng chữ thường (HTML không phân biệt hoa thường, nhưng đây là quy ước của mọi lập trình viên).</p>
+
+  <h3>Phần tử lồng nhau</h3>
+  <p>Phần tử có thể chứa phần tử khác. Trang HTML thực chất là một cái cây các phần tử lồng nhau, gốc là <code>&lt;html&gt;</code>. Quy tắc vàng: <strong>mở sau thì đóng trước</strong>, giống hộp nhỏ nằm gọn trong hộp lớn.</p>
+<script type="text/plain" class="code" data-lang="html" data-cap="Đúng: strong nằm gọn trong p. Sai: hai thẻ đóng chéo nhau.">
+<p>Chữ <strong>rất quan trọng</strong> nằm trong đoạn văn.</p>
+
+<p>Chữ <strong>sai thứ tự đóng</p></strong>
+</script>
+
+  <h3>Phần tử rỗng</h3>
+  <p>Một số phần tử không chứa nội dung nên không có thẻ đóng. Ví dụ: <code>&lt;br&gt;</code> (ngắt dòng), <code>&lt;hr&gt;</code> (đường kẻ ngang), <code>&lt;img&gt;</code> (ảnh), <code>&lt;meta&gt;</code> và <code>&lt;link&gt;</code>. Bạn có thể gặp cách viết <code>&lt;br /&gt;</code> có dấu gạch chéo ở cuối, nhưng trong HTML5 không cần.</p>
+<script type="text/plain" class="try" data-h="230">
+<p>Dòng một<br>Dòng hai (ngắt bằng br)</p>
+<hr>
+<p>Chữ <strong>đậm và <em>nghiêng</em></strong> lồng nhau.</p>
+</script>
+  <p class="note"><strong>Khối và dòng.</strong> Phần tử <code>&lt;p&gt;</code> là phần tử <em>khối</em>: luôn bắt đầu ở dòng mới và chiếm hết chiều ngang. Phần tử <code>&lt;strong&gt;</code> là phần tử <em>dòng</em>: nằm gọn trong dòng chữ. Bạn sẽ học sâu hơn ở giai đoạn 2 (Block và Inline).</p>
+  <p class="warn"><strong>Quên thẻ đóng.</strong> Trình duyệt sẽ tự đoán chỗ đóng và thường đoán sai so với ý bạn: chữ đậm tràn sang các đoạn sau, liên kết nuốt cả trang. Khi trang hiển thị "kỳ lạ", việc đầu tiên là kiểm tra từng cặp thẻ.</p>
+<h3>Bài tập nhanh</h3>
+<div data-exmount="y3"></div>
+</section>
+
+<section class="chapter" id="c4" data-toc="Thuộc tính HTML" data-no="4">
+  <div class="ch-head"><span class="ch-no">4</span><h2>Thuộc tính HTML</h2></div>
+  <p class="tags">Thuộc tính trong bài: <code>href</code> <code>src</code> <code>alt</code> <code>width</code> <code>height</code> <code>style</code> <code>lang</code> <code>title</code></p>
+
+  <p><strong>Thuộc tính</strong> (attribute) cung cấp thông tin bổ sung cho phần tử. Nó luôn nằm trong thẻ mở, dưới dạng cặp <code>tên="giá trị"</code>.</p>
+  <div class="anat" role="img" aria-label="Thẻ a gồm tên thẻ a, tên thuộc tính href và giá trị https://example.com">
+    <div class="col k1"><b>&lt;a </b><i></i><span>tên thẻ</span></div>
+    <div class="col k4"><b>href</b><i></i><span>tên thuộc tính</span></div>
+    <div class="col k3"><b>="https://example.com"</b><i></i><span>giá trị</span></div>
+    <div class="col k1"><b>&gt;</b><i></i><span></span></div>
+  </div>
+
+  <h3>Những thuộc tính bạn sẽ dùng nhiều</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Thuộc tính</th><th>Dùng với</th><th>Tác dụng</th></tr></thead>
+    <tbody>
+      <tr><td><code>href</code></td><td><code>&lt;a&gt;</code></td><td>Địa chỉ đích của liên kết</td></tr>
+      <tr><td><code>src</code></td><td><code>&lt;img&gt;</code></td><td>Đường dẫn tới tệp ảnh</td></tr>
+      <tr><td><code>alt</code></td><td><code>&lt;img&gt;</code></td><td>Văn bản thay thế khi ảnh không hiển thị, và để trình đọc màn hình mô tả ảnh</td></tr>
+      <tr><td><code>width</code>, <code>height</code></td><td><code>&lt;img&gt;</code></td><td>Kích thước ảnh, tính bằng pixel</td></tr>
+      <tr><td><code>style</code></td><td>Hầu hết phần tử</td><td>Khai báo kiểu dáng ngay trên phần tử (bài 7)</td></tr>
+      <tr><td><code>lang</code></td><td>Hầu hết phần tử</td><td>Ngôn ngữ của nội dung</td></tr>
+      <tr><td><code>title</code></td><td>Hầu hết phần tử</td><td>Chú thích hiện ra khi rê chuột</td></tr>
+    </tbody>
+  </table></div>
+<script type="text/plain" class="try" data-h="200">
+<p title="Đây là chú thích, hiện khi rê chuột">Rê chuột vào đoạn này.</p>
+<p title=Xin chào>Thiếu dấu nháy: rê chuột và xem chú thích.</p>
+<a href="https://example.com" target="_blank">Liên kết mở trong tab mới</a>
+</script>
+  <p>Đoạn thứ hai cố ý viết sai. Khi không có dấu nháy, giá trị kết thúc ở khoảng trắng đầu tiên, nên chú thích chỉ là "Xin" còn "chào" bị hiểu là một thuộc tính riêng.</p>
+
+  <h3>Quy tắc viết thuộc tính</h3>
+  <ul>
+    <li>Luôn đặt giá trị trong <strong>dấu nháy kép</strong> <code>"..."</code>. Được phép dùng nháy đơn <code>'...'</code>, và bắt buộc dùng khi giá trị đã chứa nháy kép.</li>
+    <li>Tên thuộc tính viết chữ thường. Nhiều thuộc tính cách nhau bằng khoảng trắng, không có dấu phẩy.</li>
+    <li>Thuộc tính đi kèm thẻ mở, không bao giờ nằm ở thẻ đóng.</li>
+  </ul>
+  <p class="warn"><strong>Dấu nháy cong.</strong> Chép mã từ Word, Zalo hay trang web có thể mang theo dấu nháy cong <code>“ ”</code>. HTML chỉ hiểu dấu nháy thẳng <code>"</code>. Nếu thuộc tính "không ăn", hãy gõ lại dấu nháy.</p>
+<h3>Bài tập nhanh</h3>
+<div data-exmount="y4"></div>
+</section>
+
+<section class="chapter" id="c5" data-toc="Tiêu đề" data-no="5">
+  <div class="ch-head"><span class="ch-no">5</span><h2>Tiêu đề</h2></div>
+  <p class="tags">Thẻ trong bài: <code>&lt;h1&gt;</code> <code>&lt;h2&gt;</code> <code>&lt;h3&gt;</code> <code>&lt;h4&gt;</code> <code>&lt;h5&gt;</code> <code>&lt;h6&gt;</code></p>
+
+  <p>HTML có sáu cấp tiêu đề, từ <code>&lt;h1&gt;</code> (quan trọng nhất) đến <code>&lt;h6&gt;</code> (ít quan trọng nhất). Trình duyệt hiển thị chữ to dần khi cấp càng cao, nhưng đó chỉ là hệ quả.</p>
+<script type="text/plain" class="try" data-h="330">
+<h1>Tiêu đề cấp 1</h1>
+<h2>Tiêu đề cấp 2</h2>
+<h3>Tiêu đề cấp 3</h3>
+<h4>Tiêu đề cấp 4</h4>
+<h5>Tiêu đề cấp 5</h5>
+<h6>Tiêu đề cấp 6</h6>
+</script>
+  <h3>Dùng tiêu đề như mục lục của một cuốn sách</h3>
+  <p>Tiêu đề cho biết <em>cấu trúc</em> của trang. Công cụ tìm kiếm dựa vào nó để hiểu trang nói về gì, và người dùng trình đọc màn hình có thể nhảy từ tiêu đề này sang tiêu đề khác. Vì vậy:</p>
+  <ul>
+    <li>Mỗi trang có <strong>một</strong> <code>&lt;h1&gt;</code>, nêu chủ đề của cả trang.</li>
+    <li>Các mục lớn dùng <code>&lt;h2&gt;</code>, mục con của chúng dùng <code>&lt;h3&gt;</code>, và cứ thế. Không nhảy cấp, ví dụ từ <code>&lt;h2&gt;</code> xuống thẳng <code>&lt;h4&gt;</code>.</li>
+    <li>Không dùng thẻ tiêu đề chỉ để làm chữ to hoặc đậm. Muốn chỉnh cỡ chữ, hãy dùng CSS.</li>
+  </ul>
+<script type="text/plain" class="code" data-lang="text" data-cap="Dàn ý của một bài viết, đọc từ các thẻ tiêu đề">
+h1  Cách pha cà phê phin
+  h2  Chuẩn bị
+    h3  Dụng cụ
+    h3  Nguyên liệu
+  h2  Các bước thực hiện
+  h2  Mẹo nhỏ
+</script>
+  <p class="warn"><strong>Lỗi thường gặp.</strong> Chọn <code>&lt;h3&gt;</code> chỉ vì "nó có cỡ chữ vừa mắt", hoặc để nhiều <code>&lt;h1&gt;</code> cho đẹp. Kết quả là dàn ý của trang bị hỏng dù nhìn bằng mắt vẫn ổn.</p>
+<h3>Bài tập nhanh</h3>
+<div data-exmount="y5"></div>
+</section>
+
+<section class="chapter" id="c6" data-toc="Đoạn văn" data-no="6">
+  <div class="ch-head"><span class="ch-no">6</span><h2>Đoạn văn</h2></div>
+  <p class="tags">Thẻ trong bài: <code>&lt;p&gt;</code> <code>&lt;br&gt;</code> <code>&lt;hr&gt;</code> <code>&lt;pre&gt;</code></p>
+
+  <p>Thẻ <code>&lt;p&gt;</code> tạo một đoạn văn. Trình duyệt tự thêm khoảng cách phía trên và phía dưới mỗi đoạn.</p>
+  <h3>Khoảng trắng bị gộp lại</h3>
+  <p>Trong HTML, dù bạn gõ bao nhiêu khoảng trắng hay dấu xuống dòng liên tiếp, trình duyệt cũng gộp thành <strong>một</strong> khoảng trắng. Muốn ngắt dòng, phải dùng thẻ.</p>
+<script type="text/plain" class="try" data-h="330">
+<p>Dòng này
+     có rất nhiều      khoảng trắng
+và xuống dòng, nhưng trình duyệt gộp hết lại.</p>
+
+<p>Ngắt dòng bằng br:<br>Hà Nội<br>Huế<br>Sài Gòn</p>
+
+<hr>
+
+<pre>Thẻ pre giữ nguyên
+   khoảng trắng
+      và xuống dòng.</pre>
+</script>
+  <div class="tbl"><table>
+    <thead><tr><th>Thẻ</th><th>Dùng khi</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;p&gt;</code></td><td>Một đoạn văn hoàn chỉnh.</td></tr>
+      <tr><td><code>&lt;br&gt;</code></td><td>Cần xuống dòng nhưng vẫn cùng một đoạn: thơ, địa chỉ, lời bài hát.</td></tr>
+      <tr><td><code>&lt;hr&gt;</code></td><td>Ngăn cách hai chủ đề trong cùng một trang. Hiển thị thành đường kẻ ngang.</td></tr>
+      <tr><td><code>&lt;pre&gt;</code></td><td>Văn bản đã định dạng sẵn, cần giữ nguyên khoảng trắng: đoạn mã, sơ đồ ký tự.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="warn"><strong>Đừng lạm dụng <code>&lt;br&gt;</code>.</strong> Gõ <code>&lt;br&gt;&lt;br&gt;&lt;br&gt;</code> để tạo khoảng cách giữa các đoạn là thói quen xấu. Hãy dùng các thẻ <code>&lt;p&gt;</code> riêng, và điều chỉnh khoảng cách bằng CSS.</p>
+<h3>Bài tập nhanh</h3>
+<div data-exmount="y6"></div>
+</section>
+
+<section class="chapter" id="c7" data-toc="Thuộc tính style" data-no="7">
+  <div class="ch-head"><span class="ch-no">7</span><h2>Thuộc tính style</h2></div>
+  <p class="tags">Thuộc tính trong bài: <code>style</code> với <code>background-color</code> <code>color</code> <code>font-family</code> <code>font-size</code> <code>text-align</code></p>
+
+  <p>Thuộc tính <code>style</code> cho phép bạn thay đổi giao diện của một phần tử ngay tại chỗ. Giá trị của nó là các khai báo CSS có dạng <code>thuộc-tính: giá-trị;</code>, nhiều khai báo viết liền nhau.</p>
+<script type="text/plain" class="code" data-lang="html">
+<p style="color: red; font-size: 20px;">Chữ đỏ, cỡ 20 pixel</p>
+</script>
+  <div class="tbl"><table>
+    <thead><tr><th>Thuộc tính CSS</th><th>Tác dụng</th><th>Ví dụ giá trị</th></tr></thead>
+    <tbody>
+      <tr><td><code>background-color</code></td><td>Màu nền</td><td><code>#EAF1FF</code></td></tr>
+      <tr><td><code>color</code></td><td>Màu chữ</td><td><code>tomato</code></td></tr>
+      <tr><td><code>font-family</code></td><td>Phông chữ</td><td><code>Verdana</code></td></tr>
+      <tr><td><code>font-size</code></td><td>Cỡ chữ</td><td><code>18px</code></td></tr>
+      <tr><td><code>text-align</code></td><td>Căn lề văn bản</td><td><code>center</code></td></tr>
+    </tbody>
+  </table></div>
+<script type="text/plain" class="try" data-h="250">
+<body style="background-color: #EAF1FF;">
+<h1 style="color: #1F3FBF; text-align: center;">Trang có style</h1>
+<p style="font-family: Verdana; font-size: 18px;">Đoạn văn phông Verdana, cỡ chữ 18px.</p>
+<p style="color: tomato;">Chữ màu tomato.</p>
+<p style="text-align: right;">Đoạn này căn phải.</p>
+</body>
+</script>
+  <p class="note"><strong>Khi nào dùng style trực tiếp?</strong> Để học và thử nhanh thì tuyệt vời. Trong sản phẩm thật, người ta gom kiểu dáng vào một khu vực riêng (bài 12) để sửa một chỗ mà cả website đổi theo. Đừng dùng những thẻ và thuộc tính đã lỗi thời như <code>&lt;font&gt;</code>, <code>&lt;center&gt;</code> hay <code>bgcolor</code>.</p>
+  <p class="warn"><strong>Lỗi thường gặp.</strong> Dùng dấu <code>=</code> thay vì dấu hai chấm (<code>style="color=red"</code>), hoặc quên dấu chấm phẩy giữa các khai báo. Bên trong <code>style</code> là CSS, không còn là cú pháp thuộc tính HTML nữa.</p>
+<h3>Bài tập nhanh</h3>
+<div data-exmount="y7"></div>
+</section>
+
+<section class="chapter" id="c8" data-toc="Định dạng văn bản" data-no="8">
+  <div class="ch-head"><span class="ch-no">8</span><h2>Định dạng văn bản</h2></div>
+  <p class="tags">Thẻ trong bài: <code>&lt;b&gt;</code> <code>&lt;strong&gt;</code> <code>&lt;i&gt;</code> <code>&lt;em&gt;</code> <code>&lt;mark&gt;</code> <code>&lt;small&gt;</code> <code>&lt;del&gt;</code> <code>&lt;ins&gt;</code> <code>&lt;sub&gt;</code> <code>&lt;sup&gt;</code></p>
+
+  <p>HTML có các thẻ nhỏ để làm nổi bật từng cụm từ bên trong đoạn văn. Chúng đều là phần tử dòng.</p>
+<script type="text/plain" class="try" data-h="250">
+<p>Bình thường, <b>b (đậm)</b>, <strong>strong (quan trọng)</strong>.</p>
+<p><i>i (giọng khác)</i>, <em>em (nhấn mạnh)</em>, <mark>mark (tô sáng)</mark>.</p>
+<p><small>small (chữ nhỏ)</small>, <del>del (đã xoá)</del>, <ins>ins (mới thêm)</ins>.</p>
+<p>Nước là H<sub>2</sub>O. Diện tích là x<sup>2</sup>.</p>
+</script>
+  <div class="tbl"><table>
+    <thead><tr><th>Thẻ</th><th>Ý nghĩa</th><th>Hiển thị mặc định</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;strong&gt;</code></td><td>Nội dung quan trọng</td><td>Chữ đậm</td></tr>
+      <tr><td><code>&lt;em&gt;</code></td><td>Nhấn giọng khi đọc</td><td>Chữ nghiêng</td></tr>
+      <tr><td><code>&lt;b&gt;</code></td><td>Chỉ để nổi bật, không thêm ý nghĩa</td><td>Chữ đậm</td></tr>
+      <tr><td><code>&lt;i&gt;</code></td><td>Giọng khác: thuật ngữ, tên tàu, ý nghĩ nhân vật</td><td>Chữ nghiêng</td></tr>
+      <tr><td><code>&lt;mark&gt;</code></td><td>Đánh dấu vì liên quan, như bút dạ quang</td><td>Nền vàng</td></tr>
+      <tr><td><code>&lt;small&gt;</code></td><td>Ghi chú phụ, bản quyền, điều khoản</td><td>Chữ nhỏ hơn</td></tr>
+      <tr><td><code>&lt;del&gt;</code></td><td>Nội dung đã bị xoá</td><td>Gạch ngang</td></tr>
+      <tr><td><code>&lt;ins&gt;</code></td><td>Nội dung mới thêm vào</td><td>Gạch chân</td></tr>
+      <tr><td><code>&lt;sub&gt;</code></td><td>Chỉ số dưới: H<sub>2</sub>O</td><td>Chữ nhỏ, hạ thấp</td></tr>
+      <tr><td><code>&lt;sup&gt;</code></td><td>Chỉ số trên: x<sup>2</sup></td><td>Chữ nhỏ, nâng cao</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note"><strong>Chọn theo ý nghĩa, không theo hình dạng.</strong> <code>&lt;strong&gt;</code> và <code>&lt;b&gt;</code> trông giống nhau, nhưng <code>&lt;strong&gt;</code> nói rằng "phần này quan trọng", và trình đọc màn hình có thể đọc bằng giọng nhấn mạnh. Khi chỉ cần chữ đậm về mặt trình bày, hãy dùng CSS. Quy tắc tương tự cho cặp <code>&lt;em&gt;</code> và <code>&lt;i&gt;</code>.</p>
+<h3>Bài tập nhanh</h3>
+<div data-exmount="y8"></div>
+</section>
+
+<section class="chapter" id="c9" data-toc="Trích dẫn và viết tắt" data-no="9">
+  <div class="ch-head"><span class="ch-no">9</span><h2>Trích dẫn và viết tắt</h2></div>
+  <p class="tags">Thẻ trong bài: <code>&lt;blockquote&gt;</code> <code>&lt;q&gt;</code> <code>&lt;abbr&gt;</code> <code>&lt;cite&gt;</code> <code>&lt;address&gt;</code> <code>&lt;bdo&gt;</code></p>
+
+  <p>Nhóm thẻ này giúp gắn ý nghĩa cho những đoạn văn đặc biệt: lời trích, từ viết tắt, tên tác phẩm, thông tin liên hệ.</p>
+<script type="text/plain" class="try" data-h="300">
+<blockquote cite="https://example.com/bai-viet">
+Cách tốt nhất để học lập trình là viết mã mỗi ngày.
+</blockquote>
+<p>Mình học <abbr title="HyperText Markup Language">HTML</abbr> để <q>tự tay làm một trang web</q>.</p>
+<p>Đọc thêm trong cuốn <cite>Lập trình web cho người mới</cite>.</p>
+<address>Liên hệ: Nguyễn Văn A<br>Hà Nội</address>
+</script>
+  <div class="tbl"><table>
+    <thead><tr><th>Thẻ</th><th>Dùng để</th><th>Ghi chú</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;blockquote&gt;</code></td><td>Khối trích dẫn dài từ nguồn khác</td><td>Thụt lề mặc định. Thuộc tính <code>cite</code> chứa địa chỉ nguồn, không hiện ra trang.</td></tr>
+      <tr><td><code>&lt;q&gt;</code></td><td>Trích dẫn ngắn trong dòng</td><td>Trình duyệt tự thêm dấu ngoặc kép.</td></tr>
+      <tr><td><code>&lt;abbr&gt;</code></td><td>Từ viết tắt</td><td>Thuộc tính <code>title</code> hiện dạng đầy đủ khi rê chuột.</td></tr>
+      <tr><td><code>&lt;cite&gt;</code></td><td>Tên một tác phẩm: sách, phim, bài hát</td><td>Hiển thị chữ nghiêng.</td></tr>
+      <tr><td><code>&lt;address&gt;</code></td><td>Thông tin liên hệ của tác giả hoặc tổ chức</td><td>Hiển thị chữ nghiêng.</td></tr>
+      <tr><td><code>&lt;bdo&gt;</code></td><td>Đảo chiều chữ với <code>dir="rtl"</code></td><td>Ít dùng, chỉ cần biết là có.</td></tr>
+    </tbody>
+  </table></div>
+<h3>Bài tập nhanh</h3>
+<div data-exmount="y9"></div>
+</section>
+
+<section class="chapter" id="c10" data-toc="Chú thích" data-no="10">
+  <div class="ch-head"><span class="ch-no">10</span><h2>Chú thích trong mã</h2></div>
+  <p class="tags">Cú pháp trong bài: <code>&lt;!-- ... --&gt;</code></p>
+
+  <p>Chú thích là đoạn văn bản trình duyệt bỏ qua hoàn toàn. Bạn dùng nó để ghi chú cho chính mình và đồng đội, hoặc để tạm ẩn một đoạn mã mà chưa muốn xoá.</p>
+<script type="text/plain" class="try" data-h="180">
+<!-- Đây là chú thích, không hiển thị -->
+<p>Đoạn này hiển thị.</p>
+<!-- <p>Đoạn này bị tạm ẩn vì nằm trong chú thích.</p> -->
+<p>Đoạn cuối cùng.</p>
+</script>
+  <p>Trong VS Code, chọn dòng cần ẩn rồi nhấn <code>Ctrl + /</code> để bật hoặc tắt chú thích nhanh.</p>
+  <p class="warn"><strong>Chú thích vẫn nằm trong mã nguồn.</strong> Ai nhấn <code>Ctrl + U</code> cũng đọc được. Đừng bao giờ ghi mật khẩu, khoá bí mật hay thông tin nội bộ vào chú thích của trang công khai. Ngoài ra chú thích HTML không lồng nhau được.</p>
+<h3>Bài tập nhanh</h3>
+<div data-exmount="y10"></div>
+</section>
+
+<section class="chapter" id="c11" data-toc="Màu sắc" data-no="11">
+  <div class="ch-head"><span class="ch-no">11</span><h2>Màu sắc</h2></div>
+  <p class="tags">Cú pháp trong bài: tên màu <code>rgb()</code> <code>#hex</code> <code>hsl()</code> <code>rgba()</code> <code>hsla()</code></p>
+
+  <p>Màu dùng ở ba chỗ chính: <code>color</code> (chữ), <code>background-color</code> (nền) và <code>border-color</code> (viền). Có nhiều cách viết cùng một màu, và chúng thay thế được cho nhau. Ví dụ màu <em>tomato</em>:</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Cách viết</th><th>Ví dụ</th><th>Cách hiểu</th></tr></thead>
+    <tbody>
+      <tr><td>Tên màu</td><td><code>tomato</code></td><td>Khoảng 140 tên có sẵn: <code>red</code>, <code>navy</code>, <code>gold</code>, <code>skyblue</code>...</td></tr>
+      <tr><td>RGB</td><td><code>rgb(255, 99, 71)</code></td><td>Lượng đỏ, xanh lá, xanh dương, mỗi kênh từ 0 đến 255.</td></tr>
+      <tr><td>HEX</td><td><code>#ff6347</code></td><td>Cũng là RGB, nhưng viết hệ thập lục phân: <code>#RRGGBB</code>. Viết gọn <code>#f00</code> = <code>#ff0000</code>.</td></tr>
+      <tr><td>HSL</td><td><code>hsl(9, 100%, 64%)</code></td><td>Sắc độ (0 đến 360 độ trên vòng màu), độ bão hoà, độ sáng. Dễ chỉnh bằng tay nhất.</td></tr>
+    </tbody>
+  </table></div>
+<script type="text/plain" class="try" data-h="270">
+<p style="color: tomato;">tomato</p>
+<p style="color: rgb(255, 99, 71);">rgb(255, 99, 71)</p>
+<p style="color: #ff6347;">#ff6347</p>
+<p style="color: hsl(9, 100%, 64%);">hsl(9, 100%, 64%)</p>
+<p style="background-color: rgba(51, 70, 214, 0.15);">Nền trong suốt 15%: rgba(51, 70, 214, 0.15)</p>
+</script>
+
+  <h3>Bộ trộn màu</h3>
+  <p>Kéo ba thanh trượt để thấy cùng một màu được viết ra ba cách khác nhau. Bạn có thể chép giá trị sang các ví dụ ở trên.</p>
+  <div class="mixer" id="mixer">
+    <div class="mx-sw" id="mxSw" role="img" aria-label="Màu đang chọn"></div>
+    <div class="mx-ctl">
+      <label>Đỏ (R)<input type="range" min="0" max="255" value="51" id="mxR"><output id="mxRo">51</output></label>
+      <label>Xanh lá (G)<input type="range" min="0" max="255" value="70" id="mxG"><output id="mxGo">70</output></label>
+      <label>Xanh dương (B)<input type="range" min="0" max="255" value="214" id="mxB"><output id="mxBo">214</output></label>
+    </div>
+    <dl class="mx-out">
+      <div><dt>RGB</dt><dd id="mxRgb"></dd></div>
+      <div><dt>HEX</dt><dd id="mxHex"></dd></div>
+      <div><dt>HSL</dt><dd id="mxHsl"></dd></div>
+    </dl>
+  </div>
+
+  <h3>Độ trong suốt</h3>
+  <p>Thêm kênh thứ tư (alpha, từ 0 là trong suốt hoàn toàn đến 1 là đặc) bằng <code>rgba(r, g, b, a)</code> hoặc <code>hsla(h, s, l, a)</code>. Dạng HEX cũng có thể thêm hai ký tự cuối: <code>#3346d626</code>.</p>
+  <p class="tip"><strong>Chọn màu chữ dễ đọc.</strong> Chữ và nền cần đủ độ tương phản. Chữ xám nhạt trên nền trắng trông thanh nhã nhưng rất khó đọc, nhất là ngoài trời hoặc với người kém thị lực. Tiêu chuẩn phổ biến là tỷ lệ tương phản tối thiểu 4,5 trên 1 cho chữ thường.</p>
+<h3>Bài tập nhanh</h3>
+<div data-exmount="y11"></div>
+</section>
+
+<section class="chapter" id="c12" data-toc="CSS trong HTML" data-no="12">
+  <div class="ch-head"><span class="ch-no">12</span><h2>Thêm CSS vào HTML</h2></div>
+  <p class="tags">Cú pháp trong bài: <code>style=""</code> <code>&lt;style&gt;</code> <code>&lt;link rel="stylesheet"&gt;</code></p>
+
+  <p>CSS là ngôn ngữ tạo kiểu cho HTML. Một quy tắc CSS gồm <em>bộ chọn</em> (chọn phần tử nào) và các <em>khai báo</em> (áp dụng kiểu gì):</p>
+<script type="text/plain" class="code" data-lang="css">
+h1 {
+  color: navy;
+  text-align: center;
+}
+</script>
+  <p>Có ba cách đưa CSS vào trang:</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Cách</th><th>Viết ở đâu</th><th>Khi nào dùng</th></tr></thead>
+    <tbody>
+      <tr><td>Inline</td><td>Thuộc tính <code>style</code> trên từng phần tử</td><td>Thử nhanh, ngoại lệ hiếm gặp</td></tr>
+      <tr><td>Nội bộ (internal)</td><td>Thẻ <code>&lt;style&gt;</code> trong <code>&lt;head&gt;</code></td><td>Một trang đơn lẻ</td></tr>
+      <tr><td>Ngoài (external)</td><td>Tệp <code>.css</code> riêng, nối bằng <code>&lt;link&gt;</code></td><td>Cả website, cách chuyên nghiệp</td></tr>
+    </tbody>
+  </table></div>
+  <h3>CSS nội bộ</h3>
+<script type="text/plain" class="try" data-h="300">
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <title>Trang có CSS nội bộ</title>
+  <style>
+    body { background-color: #F3F6FF; }
+    h1 { color: #2A3FC7; }
+    p { font-family: Verdana, sans-serif; font-size: 17px; }
+  </style>
+</head>
+<body>
+  <h1>Kiểu dáng từ thẻ style</h1>
+  <p>Một quy tắc áp dụng cho mọi thẻ p.</p>
+  <p style="color: crimson;">Style trên phần tử mạnh hơn: đoạn này màu crimson.</p>
+</body>
+</html>
+</script>
+  <h3>CSS ngoài</h3>
+  <p>Đây là cách chuyên nghiệp: kiểu dáng nằm trong tệp riêng, mọi trang cùng nối tới nó. Sửa một chỗ, cả website đổi theo. Khung xem trước không tải được tệp ngoài, nên dưới đây chỉ là mã tham khảo.</p>
+<script type="text/plain" class="code" data-lang="html" data-cap="Trong index.html: nối tới tệp style.css nằm cùng thư mục">
+<head>
+  <meta charset="UTF-8">
+  <title>Trang có CSS ngoài</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+</script>
+<script type="text/plain" class="code" data-lang="css" data-cap="Nội dung tệp style.css">
+/* style.css */
+body { background-color: #F3F6FF; }
+h1   { color: #2A3FC7; }
+</script>
+  <p class="note"><strong>Khi các quy tắc xung đột.</strong> Kiểu inline thường thắng kiểu trong thẻ <code>&lt;style&gt;</code> hoặc tệp ngoài. Nếu cùng độ ưu tiên, quy tắc viết sau thắng quy tắc viết trước. Cơ chế này gọi là <em>cascade</em> (tầng thác), ta sẽ học kỹ ở giai đoạn CSS.</p>
+<h3>Bài tập nhanh</h3>
+<div data-exmount="y12"></div>
+</section>
+
+<section class="chapter" id="c13" data-toc="Liên kết" data-no="13">
+  <div class="ch-head"><span class="ch-no">13</span><h2>Liên kết</h2></div>
+  <p class="tags">Thẻ trong bài: <code>&lt;a&gt;</code> với <code>href</code> <code>target</code> <code>rel</code> <code>title</code> <code>id</code></p>
+
+  <p>Liên kết (hyperlink) là thứ làm nên chữ "Hyper" trong HTML: bấm vào một chỗ để nhảy sang chỗ khác. Thẻ <code>&lt;a&gt;</code> (anchor) tạo liên kết, thuộc tính <code>href</code> cho biết đích đến, còn nội dung giữa hai thẻ là chữ (hoặc ảnh) để bấm.</p>
+<script type="text/plain" class="code" data-lang="html">
+<a href="https://www.w3schools.com/html/">Học HTML tại w3schools</a>
+</script>
+
+  <h3>Đường dẫn tuyệt đối và tương đối</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Loại</th><th>Ví dụ</th><th>Ý nghĩa</th></tr></thead>
+    <tbody>
+      <tr><td>Tuyệt đối</td><td><code>https://example.com/gioi-thieu.html</code></td><td>Địa chỉ đầy đủ, dùng để trỏ tới website khác.</td></tr>
+      <tr><td>Tương đối, cùng thư mục</td><td><code>gioi-thieu.html</code></td><td>Tệp nằm cạnh trang hiện tại.</td></tr>
+      <tr><td>Tương đối, thư mục con</td><td><code>anh/avatar.jpg</code></td><td>Vào thư mục <code>anh</code> rồi lấy tệp <code>avatar.jpg</code>.</td></tr>
+      <tr><td>Tương đối, lên thư mục cha</td><td><code>../index.html</code></td><td><code>..</code> nghĩa là đi lên một cấp.</td></tr>
+      <tr><td>Từ gốc website</td><td><code>/css/style.css</code></td><td>Bắt đầu từ thư mục gốc của website.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="tip"><strong>Dùng đường dẫn tương đối cho tệp của chính bạn.</strong> Khi chuyển website sang tên miền khác, mọi liên kết nội bộ vẫn chạy. Tên tệp trên máy chủ thường phân biệt hoa thường: <code>Anh.jpg</code> khác <code>anh.jpg</code>.</p>
+
+  <h3>Mở liên kết ở đâu, và các loại liên kết đặc biệt</h3>
+<script type="text/plain" class="try" data-h="300">
+<p><a href="#muc-2">Nhảy tới mục 2 (cùng trang)</a></p>
+<p><a href="https://example.com" target="_blank" rel="noopener" title="Mở example.com">Liên kết ngoài, mở tab mới</a></p>
+<p><a href="mailto:ban@example.com">Gửi email</a> hoặc <a href="tel:+84900000000">gọi điện</a></p>
+<p style="margin-bottom: 200px;">Cuộn xuống để thấy mục 2...</p>
+<h2 id="muc-2">Mục 2</h2>
+<p>Bạn đã tới nơi. <a href="#">Về đầu trang</a></p>
+</script>
+  <ul>
+    <li><code>target="_blank"</code> mở liên kết ở tab mới. Mặc định (<code>_self</code>) mở ngay tại tab hiện tại.</li>
+    <li><code>rel="noopener"</code> đi kèm <code>target="_blank"</code> để trang mới không điều khiển ngược được trang cũ. Trình duyệt hiện đại đã tự làm điều này, nhưng ghi rõ vẫn là thói quen tốt.</li>
+    <li><code>mailto:</code> mở chương trình email, <code>tel:</code> gọi điện thoại (rất hữu ích trên điện thoại).</li>
+    <li><strong>Bookmark</strong>: gán <code>id="muc-2"</code> cho một phần tử, rồi liên kết tới nó bằng <code>href="#muc-2"</code>. Có thể trỏ tới phần của trang khác: <code>gioi-thieu.html#muc-2</code>. Mỗi <code>id</code> là duy nhất trong một trang.</li>
+    <li>Cho ảnh làm liên kết bằng cách đặt <code>&lt;img&gt;</code> vào bên trong <code>&lt;a&gt;</code>.</li>
+  </ul>
+  <p class="note"><strong>Màu liên kết mặc định.</strong> Chưa bấm: xanh dương gạch chân. Đã ghé thăm: tím. Đang nhấn: đỏ. Bạn sẽ đổi được các màu này bằng CSS ở giai đoạn sau.</p>
+  <p class="warn"><strong>Chữ liên kết phải có nghĩa.</strong> "Bấm vào đây" và "Xem thêm" đứng riêng vô nghĩa với người dùng trình đọc màn hình (họ hay nghe danh sách các liên kết) và cũng kém cho công cụ tìm kiếm. Hãy viết "Xem bảng học phí" hoặc "Tải hướng dẫn cài đặt".</p>
+<h3>Bài tập nhanh</h3>
+<div data-exmount="y13"></div>
+</section>
+
+<section class="chapter" id="c14" data-toc="Hình ảnh" data-no="14">
+  <div class="ch-head"><span class="ch-no">14</span><h2>Hình ảnh</h2></div>
+  <p class="tags">Thẻ trong bài: <code>&lt;img&gt;</code> <code>&lt;figure&gt;</code> <code>&lt;figcaption&gt;</code> <code>&lt;picture&gt;</code></p>
+
+  <p>Thẻ <code>&lt;img&gt;</code> là phần tử rỗng, hiển thị ảnh nhờ hai thuộc tính bắt buộc: <code>src</code> (ảnh ở đâu) và <code>alt</code> (mô tả ảnh bằng chữ). Nên thêm luôn <code>width</code> và <code>height</code>.</p>
+<script type="text/plain" class="try" data-h="330">
+<img src="mountain.svg" alt="Dãy núi lúc hoàng hôn" width="240" height="150">
+
+<figure>
+  <img src="avatar.svg" alt="Ảnh đại diện" width="96" height="96">
+  <figcaption>Hình 1: ảnh đại diện.</figcaption>
+</figure>
+
+<img src="khong-co.jpg" alt="Ảnh này không tải được nên chữ alt hiện ra">
+</script>
+  <p>Ảnh thứ ba cố tình trỏ tới tệp không tồn tại. Đây chính là lúc <code>alt</code> phát huy tác dụng: trình duyệt hiện chữ mô tả thay cho ảnh hỏng.</p>
+
+  <h3>Viết alt cho tốt</h3>
+  <ul>
+    <li>Mô tả nội dung hoặc mục đích của ảnh, ngắn gọn. Không cần mở đầu bằng "Hình ảnh của...".</li>
+    <li>Ảnh chỉ để trang trí, không mang thông tin: dùng <code>alt=""</code> (rỗng) để trình đọc màn hình bỏ qua. Đừng bỏ hẳn thuộc tính <code>alt</code>, vì khi đó nó có thể đọc lên cả tên tệp.</li>
+    <li>Ảnh là liên kết: <code>alt</code> mô tả nơi liên kết dẫn tới.</li>
+  </ul>
+
+  <h3>Kích thước và định dạng</h3>
+  <p>Khai báo <code>width</code> và <code>height</code> (số nguyên, tính bằng pixel, không viết "px") giúp trình duyệt dành sẵn chỗ trước khi ảnh tải xong, nên trang không bị giật nhảy. Nếu chỉ khai báo một chiều, ảnh giữ nguyên tỷ lệ.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Định dạng</th><th>Hợp với</th></tr></thead>
+    <tbody>
+      <tr><td>JPEG (<code>.jpg</code>)</td><td>Ảnh chụp, nhiều màu</td></tr>
+      <tr><td>PNG</td><td>Ảnh cần nền trong suốt, ảnh chụp màn hình</td></tr>
+      <tr><td>GIF</td><td>Ảnh động ngắn, đơn giản</td></tr>
+      <tr><td>SVG</td><td>Logo, biểu tượng, hình vẽ: phóng to không vỡ, rất nhẹ</td></tr>
+      <tr><td>WebP, AVIF</td><td>Định dạng hiện đại, nhẹ hơn JPEG và PNG với chất lượng tương đương</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Chú thích ảnh và ảnh thích ứng</h3>
+  <p>Thẻ <code>&lt;figure&gt;</code> gói một ảnh cùng <code>&lt;figcaption&gt;</code> (chú thích), như hình minh hoạ trong sách. Thẻ <code>&lt;picture&gt;</code> cho phép trình duyệt chọn ảnh phù hợp nhất với từng màn hình hoặc định dạng nó hỗ trợ.</p>
+<script type="text/plain" class="code" data-lang="html" data-cap="Ví dụ tham khảo: thử WebP trước, không hỗ trợ thì dùng JPEG">
+<picture>
+  <source srcset="bien.webp" type="image/webp">
+  <img src="bien.jpg" alt="Bãi biển lúc bình minh" width="600" height="400">
+</picture>
+</script>
+  <p class="tip"><strong>Mẹo hiệu năng.</strong> Ảnh thường là phần nặng nhất của trang. Nén ảnh trước khi đưa lên, và với ảnh nằm ở cuối trang hãy thêm <code>loading="lazy"</code> để trình duyệt chỉ tải khi người dùng cuộn tới.</p>
+  <p class="note"><strong>Ảnh nền</strong> (background image) và <strong>bản đồ ảnh</strong> (image map) cũng nằm trong bài Images của w3schools. Ảnh nền do CSS đảm nhiệm nên ta gặp lại ở giai đoạn CSS. Bản đồ ảnh rất ít dùng ngày nay, chỉ cần biết là có.</p>
+<h3>Bài tập nhanh</h3>
+<div data-exmount="y14"></div>
+</section>
+
+<section class="chapter" id="c15" data-toc="Favicon" data-no="15">
+  <div class="ch-head"><span class="ch-no">15</span><h2>Favicon</h2></div>
+  <p class="tags">Thẻ trong bài: <code>&lt;link rel="icon"&gt;</code></p>
+
+  <p>Favicon là biểu tượng nhỏ hiện trên tab trình duyệt, dấu trang và lịch sử. Nó giúp người dùng nhận ra website của bạn giữa hàng chục tab đang mở. Khai báo favicon bằng thẻ <code>&lt;link&gt;</code> đặt trong <code>&lt;head&gt;</code>.</p>
+<script type="text/plain" class="try" data-h="200">
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Trang có favicon</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <p>Nhìn lên tab của khung xem trước: biểu tượng đã đổi.</p>
+  <p>Thử xoá thẻ link rồi xem tab.</p>
+</body>
+</html>
+</script>
+  <ul>
+    <li>Định dạng phổ biến: <code>.ico</code>, <code>.png</code> (32 x 32 hoặc lớn hơn) và <code>.svg</code>.</li>
+    <li>Thuộc tính <code>href</code> là đường dẫn tới tệp biểu tượng, <code>type</code> nói rõ định dạng.</li>
+    <li>Không khai báo thì nhiều trình duyệt tự tìm <code>/favicon.ico</code> ở gốc website.</li>
+  </ul>
+  <p class="warn"><strong>Đổi favicon mà tab vẫn hiện biểu tượng cũ?</strong> Trình duyệt lưu đệm favicon rất lâu. Hãy tải lại cứng bằng <code>Ctrl + F5</code>, hoặc đóng hẳn tab rồi mở lại.</p>
+<h3>Bài tập nhanh</h3>
+<div data-exmount="y15"></div>
+</section>
+
+<section class="chapter" id="c16" data-toc="Tiêu đề trang" data-no="16">
+  <div class="ch-head"><span class="ch-no">16</span><h2>Tiêu đề trang</h2></div>
+  <p class="tags">Thẻ trong bài: <code>&lt;title&gt;</code></p>
+
+  <p>Thẻ <code>&lt;title&gt;</code> nằm trong <code>&lt;head&gt;</code>, mỗi trang chỉ có một. Nội dung của nó xuất hiện ở ba nơi: tab trình duyệt, tên dấu trang khi người dùng lưu, và dòng tiêu đề xanh trong kết quả tìm kiếm. Vì thế nó ảnh hưởng trực tiếp tới việc có ai bấm vào trang bạn hay không.</p>
+<script type="text/plain" class="try" data-h="180">
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Cách luộc trứng lòng đào | Bếp Nhà Mình</title>
+</head>
+<body>
+  <h1>Cách luộc trứng lòng đào</h1>
+  <p>Hãy sửa thẻ title và xem tab thay đổi.</p>
+</body>
+</html>
+</script>
+  <h3>Đặt title thế nào cho tốt</h3>
+  <ul>
+    <li>Ngắn gọn, khoảng 50 đến 60 ký tự để không bị cắt trong kết quả tìm kiếm.</li>
+    <li>Mô tả đúng nội dung <em>riêng</em> của trang. Mỗi trang một title khác nhau.</li>
+    <li>Đặt phần quan trọng ở đầu, tên website ở cuối: <code>Cách luộc trứng | Bếp Nhà Mình</code>.</li>
+  </ul>
+  <div class="tbl"><table>
+    <thead><tr><th>Dễ nhầm</th><th>Nằm ở đâu</th><th>Hiển thị ở đâu</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;title&gt;</code></td><td>Trong <code>&lt;head&gt;</code></td><td>Tab, dấu trang, kết quả tìm kiếm</td></tr>
+      <tr><td><code>&lt;h1&gt;</code></td><td>Trong <code>&lt;body&gt;</code></td><td>Tiêu đề lớn trong nội dung trang</td></tr>
+      <tr><td>Thuộc tính <code>title</code></td><td>Trên bất kỳ phần tử nào</td><td>Chú thích khi rê chuột</td></tr>
+    </tbody>
+  </table></div>
+<h3>Bài tập nhanh</h3>
+<div data-exmount="y16"></div>
+</section>
+
+<section class="chapter" id="c17" data-toc="Tổng kết và tra cứu nhanh" data-no="17">
+  <div class="ch-head"><span class="ch-no">17</span><h2>Tổng kết và tra cứu nhanh</h2></div>
+
+  <h3>Khung trang chuẩn để bắt đầu mọi dự án</h3>
+<script type="text/plain" class="code" data-lang="html" data-cap="Chép khung này vào tệp mới, sau đó thêm nội dung vào body">
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tiêu đề trang | Tên website</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <h1>Tiêu đề chính của trang</h1>
+  <p>Nội dung...</p>
+</body>
+</html>
+</script>
+
+  <h3>Danh sách kiểm tra trước khi nộp một trang</h3>
+  <ul>
+    <li>Có <code>&lt;!DOCTYPE html&gt;</code>, <code>lang</code>, <code>charset</code> và <code>title</code>.</li>
+    <li>Chỉ một <code>&lt;h1&gt;</code>, các cấp tiêu đề không nhảy cấp.</li>
+    <li>Thẻ nào mở thì đều đóng, đóng đúng thứ tự.</li>
+    <li>Thuộc tính đều có dấu nháy kép thẳng.</li>
+    <li>Mọi ảnh đều có <code>alt</code>, phần lớn có <code>width</code> và <code>height</code>.</li>
+    <li>Chữ liên kết có nghĩa, liên kết ngoài mở tab mới đi kèm <code>rel="noopener"</code>.</li>
+    <li>Đường dẫn ảnh và liên kết nội bộ đã thử bấm thật, đúng cả hoa thường.</li>
+    <li>Định dạng chữ chọn theo ý nghĩa (<code>strong</code>, <code>em</code>), không phải theo hình dạng.</li>
+  </ul>
+
+  <h3>Lỗi thường gặp và cách sửa</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Lỗi</th><th>Biểu hiện</th><th>Cách sửa</th></tr></thead>
+    <tbody>
+      <tr><td>Thiếu <code>meta charset</code></td><td>Chữ có dấu bị vỡ thành ký tự lạ</td><td>Thêm <code>&lt;meta charset="UTF-8"&gt;</code>, lưu tệp UTF-8</td></tr>
+      <tr><td>Quên thẻ đóng</td><td>Bố cục lạ, chữ đậm hoặc liên kết tràn sang đoạn sau</td><td>Rà từng cặp thẻ, dùng Format Document (<code>Shift + Alt + F</code>) để thấy thụt lề sai</td></tr>
+      <tr><td>Lồng thẻ sai thứ tự</td><td>Hiển thị bất thường</td><td>Mở sau, đóng trước</td></tr>
+      <tr><td>Thiếu dấu nháy giá trị</td><td>Thuộc tính bị cắt cụt</td><td>Luôn dùng nháy kép</td></tr>
+      <tr><td>Đường dẫn sai</td><td>Ảnh hỏng, liên kết báo 404</td><td>Kiểm tra tên tệp, thư mục, hoa thường</td></tr>
+      <tr><td>Dùng tiêu đề để chỉnh cỡ chữ</td><td>Dàn ý trang lộn xộn</td><td>Dùng đúng cấp tiêu đề, chỉnh cỡ chữ bằng CSS</td></tr>
+      <tr><td>Nhiều <code>&lt;br&gt;</code> liên tiếp</td><td>Khoảng cách lộn xộn</td><td>Dùng các <code>&lt;p&gt;</code> riêng và CSS</td></tr>
+      <tr><td>Thiếu <code>alt</code></td><td>Trình đọc màn hình đọc tên tệp ảnh</td><td>Luôn thêm <code>alt</code>, rỗng nếu ảnh chỉ trang trí</td></tr>
+      <tr><td>Lưu tệp sai đuôi</td><td>Trình duyệt hiện chữ thô thay vì trang</td><td>Đổi thành <code>.html</code>, bỏ khoảng trắng trong tên</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Bảng tra cứu nhanh các thẻ của giai đoạn 1</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Thẻ</th><th>Dùng để</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;!DOCTYPE html&gt;</code></td><td>Khai báo tài liệu HTML5</td></tr>
+      <tr><td><code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code></td><td>Gốc, phần thông tin, phần nội dung</td></tr>
+      <tr><td><code>&lt;meta&gt;</code>, <code>&lt;title&gt;</code>, <code>&lt;link&gt;</code></td><td>Bảng mã và viewport, tiêu đề trang, favicon và tệp CSS</td></tr>
+      <tr><td><code>&lt;h1&gt;</code> đến <code>&lt;h6&gt;</code></td><td>Tiêu đề sáu cấp</td></tr>
+      <tr><td><code>&lt;p&gt;</code>, <code>&lt;br&gt;</code>, <code>&lt;hr&gt;</code>, <code>&lt;pre&gt;</code></td><td>Đoạn văn, ngắt dòng, đường kẻ ngang, văn bản định dạng sẵn</td></tr>
+      <tr><td><code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;b&gt;</code>, <code>&lt;i&gt;</code></td><td>Quan trọng, nhấn giọng, đậm và nghiêng thuần hình thức</td></tr>
+      <tr><td><code>&lt;mark&gt;</code>, <code>&lt;small&gt;</code>, <code>&lt;del&gt;</code>, <code>&lt;ins&gt;</code>, <code>&lt;sub&gt;</code>, <code>&lt;sup&gt;</code></td><td>Tô sáng, chữ nhỏ, đã xoá, mới thêm, chỉ số dưới, chỉ số trên</td></tr>
+      <tr><td><code>&lt;blockquote&gt;</code>, <code>&lt;q&gt;</code>, <code>&lt;cite&gt;</code>, <code>&lt;abbr&gt;</code>, <code>&lt;address&gt;</code></td><td>Trích dẫn dài, trích dẫn ngắn, tên tác phẩm, viết tắt, thông tin liên hệ</td></tr>
+      <tr><td><code>&lt;a&gt;</code></td><td>Liên kết, bookmark, email, điện thoại</td></tr>
+      <tr><td><code>&lt;img&gt;</code>, <code>&lt;figure&gt;</code>, <code>&lt;figcaption&gt;</code></td><td>Ảnh, khối minh hoạ, chú thích ảnh</td></tr>
+      <tr><td><code>&lt;!-- --&gt;</code></td><td>Chú thích</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="part" id="quiz" data-toc="Trắc nghiệm">
+  <h2>Trắc nghiệm</h2>
+  <p>Chọn một đáp án cho mỗi câu, đáp án đúng và lời giải thích hiện ra ngay. Điểm số hiện ở thanh nổi phía dưới màn hình. Đừng đoán: nếu chưa chắc, hãy quay lại bài học hoặc thử trong khung mã rồi trả lời.</p>
+  <div id="quizList"></div>
+  <div id="quizSummary"></div>
+</section>
+
+<section class="part" id="bai-tap" data-toc="Bài tập vận dụng">
+  <h2>Bài tập vận dụng</h2>
+  <p>Mỗi bài có một khung soạn mã và một danh sách yêu cầu. Viết mã, xem kết quả bên phải, rồi nhấn <strong>Kiểm tra</strong> để biết đã đạt những yêu cầu nào. Bạn có thể xem gợi ý, và chỉ nên xem lời giải sau khi đã tự thử. Mã bạn viết được lưu lại trong trình duyệt này, quay lại lúc nào cũng còn.</p>
+  <p class="progress" id="exProgress" aria-live="polite"></p>
+  <div id="exList"></div>
+
+  <h3>Thử thách tự luyện (không chấm tự động)</h3>
+  <ol>
+    <li>Mở một trang web bạn yêu thích, nhấn <code>Ctrl + U</code> và tìm ít nhất năm loại thẻ bạn đã học. Ghi lại thẻ nào bạn chưa biết để tra sau.</li>
+    <li>Tạo trang <code>cv.html</code> cho chính bạn trên máy: có ảnh thật, hai liên kết ngoài, một bookmark. Mở bằng trình duyệt và bằng điện thoại.</li>
+    <li>Cố tình viết sai năm lỗi trong bảng "Lỗi thường gặp", quan sát trình duyệt hiển thị thế nào, rồi sửa từng lỗi.</li>
+    <li>Làm các Exercises và Code Challenge của w3schools ở những chương tương ứng để so sánh cách ra đề.</li>
+  </ol>
+</section>
+
+<section class="part" id="tiep-theo" data-toc="Bước tiếp theo">
+  <h2>Bước tiếp theo</h2>
+  <p>Nếu bạn đã viết được trang ở bài tập 8 và đạt trên 80% trắc nghiệm, bạn sẵn sàng sang <strong>Giai đoạn 2: HTML cấu trúc trang và biểu mẫu</strong>. Giai đoạn này gồm bảng (Tables), danh sách (Lists), khối và dòng (Block và Inline), thẻ <code>&lt;div&gt;</code>, class và id, nút bấm, iframe, đường dẫn tệp (File Paths), thẻ head, bố cục (Layout), responsive, thẻ ngữ nghĩa (Semantics), ký tự đặc biệt (Entities) và biểu mẫu (Forms).</p>
+
+  <div class="foot">
+    <p><strong>Đối chiếu và học thêm.</strong> Tài liệu này viết lại nội dung bằng lời riêng và ví dụ riêng, bám theo trình tự chương của w3schools. Khi muốn đào sâu, bạn có thể mở các chương gốc:</p>
+    <ul class="links">
+      <li><a href="https://www.w3schools.com/html/html_intro.asp" target="_blank" rel="noopener">Bài 1: Introduction</a></li>
+      <li><a href="https://www.w3schools.com/html/html_editors.asp" target="_blank" rel="noopener">Bài 1: Editors</a></li>
+      <li><a href="https://www.w3schools.com/html/html_basic.asp" target="_blank" rel="noopener">Bài 2: Basic</a></li>
+      <li><a href="https://www.w3schools.com/html/html_elements.asp" target="_blank" rel="noopener">Bài 3: Elements</a></li>
+      <li><a href="https://www.w3schools.com/html/html_attributes.asp" target="_blank" rel="noopener">Bài 4: Attributes</a></li>
+      <li><a href="https://www.w3schools.com/html/html_headings.asp" target="_blank" rel="noopener">Bài 5: Headings</a></li>
+      <li><a href="https://www.w3schools.com/html/html_paragraphs.asp" target="_blank" rel="noopener">Bài 6: Paragraphs</a></li>
+      <li><a href="https://www.w3schools.com/html/html_styles.asp" target="_blank" rel="noopener">Bài 7: Styles</a></li>
+      <li><a href="https://www.w3schools.com/html/html_formatting.asp" target="_blank" rel="noopener">Bài 8: Formatting</a></li>
+      <li><a href="https://www.w3schools.com/html/html_quotation_elements.asp" target="_blank" rel="noopener">Bài 9: Quotations</a></li>
+      <li><a href="https://www.w3schools.com/html/html_comments.asp" target="_blank" rel="noopener">Bài 10: Comments</a></li>
+      <li><a href="https://www.w3schools.com/html/html_colors.asp" target="_blank" rel="noopener">Bài 11: Colors</a></li>
+      <li><a href="https://www.w3schools.com/html/html_css.asp" target="_blank" rel="noopener">Bài 12: CSS</a></li>
+      <li><a href="https://www.w3schools.com/html/html_links.asp" target="_blank" rel="noopener">Bài 13: Links</a></li>
+      <li><a href="https://www.w3schools.com/html/html_images.asp" target="_blank" rel="noopener">Bài 14: Images</a></li>
+      <li><a href="https://www.w3schools.com/html/html_favicon.asp" target="_blank" rel="noopener">Bài 15: Favicon</a></li>
+      <li><a href="https://www.w3schools.com/html/html_page_title.asp" target="_blank" rel="noopener">Bài 16: Page Title</a></li>
+      <li><a href="https://www.w3schools.com/html/html_quiz.asp" target="_blank" rel="noopener">HTML Quiz của w3schools</a></li>
+      <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noopener">MDN Web Docs: HTML</a></li>
+    </ul>
+  </div>
+</section>
+
+</main>
+</div>
+
+<div class="scorebar" id="scoreBar" role="status" aria-live="polite"><span id="scoreText"></span></div>
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var esc=function(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')};
+var fmt=function(s){return esc(s).replace(/\{\{([\s\S]+?)\}\}/g,'<code>$1</code>')};
+var clean=function(t){return t.replace(/^\s*\n/,'').replace(/\s+$/,'')};
+var store={
+  get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},
+  set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}},
+  del:function(k){try{localStorage.removeItem(k)}catch(e){}}
+};
+
+/* ---------- virtual files available in every preview ---------- */
+var svgURI=function(s){return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s)};
+var FILES={
+  'avatar.svg':svgURI('<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><defs><clipPath id="c"><circle cx="80" cy="80" r="80"/></clipPath></defs><g clip-path="url(#c)"><rect width="160" height="160" fill="#3346D6"/><circle cx="80" cy="64" r="28" fill="#FFE45C"/><ellipse cx="80" cy="152" rx="56" ry="46" fill="#FFFFFF"/></g></svg>'),
+  'mountain.svg':svgURI('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200"><rect width="320" height="200" fill="#BFD4FF"/><circle cx="250" cy="52" r="26" fill="#FFE45C"/><polygon points="0,200 95,68 190,200" fill="#6F86E8"/><polygon points="110,200 205,86 320,200" fill="#3346D6"/><rect y="176" width="320" height="24" fill="#1B2A8F"/></svg>'),
+  'favicon.svg':svgURI('<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#3346D6"/><path d="M13 9l-7 7 7 7M19 9l7 7-7 7" stroke="#FFE45C" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+};
+
+FILES['images/logo.png']=FILES['images/avatar.svg']=FILES['images/avatar.jpg']=FILES['avatar.svg'];
+var VCSS={'css/styles.css':'body{font-family:sans-serif}h1{color:#3346D6}','styles.css':'body{font-family:sans-serif}h1{color:#3346D6}','style.css':'body{font-family:sans-serif}h1{color:#3346D6}'};
+/* ---------- syntax highlighting for static code ---------- */
+function hlHTML(code){
+  var re=/<!--[\s\S]*?-->|<![^>]*>|<\/?[a-zA-Z][^>]*>|[^<]+|</g;
+  return code.replace(re,function(t){
+    if(t.indexOf('<!--')===0) return '<span class="t-com">'+esc(t)+'</span>';
+    if(/^<!/.test(t)) return '<span class="t-doc">'+esc(t)+'</span>';
+    if(/^<\/?[a-zA-Z]/.test(t)){
+      var m=t.match(/^(<\/?)([a-zA-Z][\w:-]*)([\s\S]*?)(\/?>)$/);
+      if(!m) return esc(t);
+      var attrs=m[3].replace(/([^\s=\/"'<>]+)(\s*=\s*)("[^"]*"|'[^']*'|[^\s"'>]+)?/g,function(a,n,eq,v){
+        return '<span class="t-attr">'+esc(n)+'</span>'+(eq?esc(eq):'')+(v?'<span class="t-str">'+esc(v)+'</span>':'');
+      });
+      return '<span class="t-tag">'+esc(m[1])+m[2]+'</span>'+attrs+'<span class="t-tag">'+esc(m[4])+'</span>';
+    }
+    return esc(t);
+  });
+}
+function hlCSS(code){
+  return code.split(/(\/\*[\s\S]*?\*\/)/).map(function(part,i){
+    if(i%2) return '<span class="t-com">'+esc(part)+'</span>';
+    return esc(part).replace(/(#[0-9a-fA-F]{3,8}\b)/g,'<span class="t-str">$1</span>').replace(/([a-z-]+)(?=:\s)/g,'<span class="t-attr">$1</span>');
+  }).join('');
+}
+var LANGNAME={html:'HTML',css:'CSS',text:'Văn bản'};
+function codeBlock(code,lang,cap){
+  var fig=document.createElement('figure'); fig.className='codeblock';
+  var body=lang==='css'?hlCSS(code):(lang==='text'?esc(code):hlHTML(code));
+  fig.innerHTML='<div class="cb-bar"><span>'+(LANGNAME[lang]||'Mã')+'</span><button type="button" class="mini copy">Sao chép</button></div><pre tabindex="0"><code>'+body+'</code></pre>'+(cap?'<figcaption>'+esc(cap)+'</figcaption>':'');
+  fig._code=code;
+  return fig;
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('.copy'); if(!b) return;
+  var fig=b.closest('.codeblock'); if(!fig) return;
+  var done=function(){b.textContent='Đã chép'; setTimeout(function(){b.textContent='Sao chép'},1400)};
+  try{ navigator.clipboard.writeText(fig._code).then(done,function(){fallback()}) }catch(err){fallback()}
+  function fallback(){ var r=document.createRange(); r.selectNodeContents($('code',fig)); var s=getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent='Đã chọn, nhấn Ctrl + C'; setTimeout(function(){b.textContent='Sao chép'},2200); }
+});
+
+/* ---------- live preview (renders user HTML safely in a shadow root) ---------- */
+var BASE_CSS=':host{all:initial;display:block}.canvas{box-sizing:border-box;min-height:100%;background:#fff;color:#000;color-scheme:light;font-family:"Times New Roman",Times,serif;font-size:16px;line-height:normal;text-align:left}.page{margin:8px}\n';
+function rewriteCSS(css){return css.replace(/(^|[},\s>+~])(html|body)(?=[\s,{:.\[#>+~])/g,'$1.page')}
+function say(host,msg){if(host._status) host._status.textContent=msg}
+function renderPreview(host,code){
+  var root=host.shadowRoot||host.attachShadow({mode:'open'});
+  var doc=new DOMParser().parseFromString(code,'text/html');
+  var meta={title:(doc.title||'').trim(),icon:null};
+  var ic=doc.querySelector('link[rel~="icon"]');
+  if(ic){var hv=ic.getAttribute('href')||''; meta.icon=FILES[hv]||(hv.indexOf('data:')===0?hv:'generic')}
+  var css=$$('style',doc).map(function(s){return rewriteCSS(s.textContent)}).join('\n');
+  var noCS=/<head[\s>]/i.test(code)&&!doc.querySelector('meta[charset],meta[http-equiv]');
+  $$('link[rel~="stylesheet"]',doc).forEach(function(l){var v=VCSS[l.getAttribute('href')||'']; if(v) css+='\n'+rewriteCSS(v)});
+  $$('iframe',doc).forEach(function(f){var b=document.createElement('div'); b.setAttribute('style','box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;text-align:center;padding:6px;background:#eef;border:2px dashed #88a;color:#335;font:13px sans-serif;max-width:100%;width:'+(parseInt(f.getAttribute('width'),10)||300)+'px;height:'+(parseInt(f.getAttribute('height'),10)||150)+'px'); b.textContent='Khung iframe (mô phỏng): '+(f.getAttribute('src')||'chưa có src')+(f.getAttribute('title')?' · '+f.getAttribute('title'):' · thiếu title'); f.replaceWith(b)});
+  $$('style,script,iframe,object,embed,base,link,meta,title,noscript,template',doc).forEach(function(n){n.remove()});
+  $$('*',doc).forEach(function(el){
+    Array.prototype.slice.call(el.attributes).forEach(function(a){
+      var n=a.name.toLowerCase();
+      if(n.indexOf('on')===0||n==='srcdoc'||/^\s*javascript:/i.test(a.value)) el.removeAttribute(a.name);
+    });
+  });
+  $$('img',doc).forEach(function(img){var s=img.getAttribute('src'); if(s&&FILES[s]) img.setAttribute('src',FILES[s])});
+  var st=document.createElement('style'); st.textContent=BASE_CSS+css;
+  var canvas=document.createElement('div'); canvas.className='canvas';
+  var page=document.createElement('div'); page.className='page';
+  var bs=doc.body.getAttribute('style'); if(bs) page.setAttribute('style',bs);
+  page.innerHTML=doc.body.innerHTML;
+  var garbled=false;
+  if(noCS){var w=document.createTreeWalker(page,NodeFilter.SHOW_TEXT),nd,nv;while((nd=w.nextNode())){try{nv=new TextDecoder('windows-1252').decode(new TextEncoder().encode(nd.nodeValue)); if(nv!==nd.nodeValue){nd.nodeValue=nv; garbled=true}}catch(e){}}}
+  canvas.appendChild(page);
+  root.replaceChildren(st,canvas);
+  try{
+    var bg=getComputedStyle(page).backgroundColor;
+    if(bg&&bg!=='rgba(0, 0, 0, 0)'&&bg!=='transparent'){canvas.style.background=bg; page.style.backgroundColor='transparent'}
+  }catch(e){}
+  if(!host._wired){
+    host._wired=true;
+    root.addEventListener('click',function(e){
+      var a=e.target.closest&&e.target.closest('a[href]'); if(!a) return;
+      e.preventDefault();
+      var h=a.getAttribute('href')||'';
+      if(h.charAt(0)==='#'){
+        var id=h.slice(1); try{id=decodeURIComponent(id)}catch(x){}
+        if(!id){host.scrollTo({top:0});return}
+        var t=root.getElementById(id);
+        if(t){host.scrollTo({top:t.getBoundingClientRect().top-host.getBoundingClientRect().top+host.scrollTop-8})}
+        else say(host,'Không có phần tử nào có id="'+id+'" trong trang này.');
+      }else{
+        say(host,'Trình duyệt thật sẽ '+(a.getAttribute('target')==='_blank'?'mở tab mới tới ':'chuyển tới ')+h+' (khung xem trước không mở trang ngoài).');
+      }
+    });
+    root.addEventListener('mouseover',function(e){
+      var a=e.target.closest&&e.target.closest('a[href]'); say(host,a?a.getAttribute('href'):'');
+    });
+    root.addEventListener('submit',function(e){e.preventDefault()});
+  }
+  say(host,garbled?'Thiếu meta charset: chữ có dấu bị lỗi hiển thị như trình duyệt thật. Thêm <meta charset="UTF-8"> vào head để sửa.':'');
+  return meta;
+}
+function updateTab(tab,meta){
+  var fav=$('.fav',tab), ttl=$('.ttl',tab);
+  ttl.textContent=meta.title||'Không có tiêu đề';
+  ttl.classList.toggle('none',!meta.title);
+  fav.className='fav'; fav.innerHTML='';
+  if(meta.icon&&meta.icon!=='generic'){var im=document.createElement('img'); im.alt=''; im.src=meta.icon; fav.appendChild(im)}
+  else if(meta.icon==='generic') fav.classList.add('custom');
+  else fav.classList.add('globe');
+}
+function sandbox(code,opt){
+  opt=opt||{};
+  var fig=document.createElement('figure'); fig.className='try'; fig.style.setProperty('--h',(opt.h||200)+'px');
+  fig.innerHTML='<div class="try-pane try-edit"><div class="pane-head"><span>Mã HTML, sửa được</span>'+(opt.reset===false?'':'<button type="button" class="mini reset">Khôi phục</button>')+'</div><textarea class="ed" spellcheck="false" autocomplete="off" autocapitalize="off" wrap="off" aria-label="Trình soạn mã HTML"></textarea></div><div class="try-pane"><div class="pane-head"><span>Kết quả trong trình duyệt</span></div><div class="browser"><div class="bar"><div class="tab"><span class="fav globe"></span><span class="ttl"></span></div></div><div class="host" tabindex="0" role="region" aria-label="Kết quả hiển thị"></div><div class="status" aria-live="polite"></div></div></div>';
+  var ed=$('.ed',fig), host=$('.host',fig), tab=$('.tab',fig);
+  host._status=$('.status',fig);
+  ed.value=code;
+  var api={
+    el:fig, ed:ed,
+    render:function(){updateTab(tab,renderPreview(host,ed.value))},
+    get value(){return ed.value},
+    set value(v){ed.value=v; api.render(); fig.dispatchEvent(new CustomEvent('codechange'))}
+  };
+  var t;
+  ed.addEventListener('input',function(){clearTimeout(t); t=setTimeout(function(){api.render(); fig.dispatchEvent(new CustomEvent('codechange'))},150)});
+  var rb=$('.reset',fig); if(rb) rb.addEventListener('click',function(){api.value=code});
+  return api;
+}
+
+/* ---------- build static blocks ---------- */
+$$('script.code').forEach(function(s){
+  s.replaceWith(codeBlock(clean(s.textContent),s.getAttribute('data-lang')||'html',s.getAttribute('data-cap')));
+});
+$$('script.try').forEach(function(s){
+  var sb=sandbox(clean(s.textContent),{h:parseInt(s.getAttribute('data-h'),10)||200});
+  s.replaceWith(sb.el); sb.render();
+});
+
+/* ---------- table of contents ---------- */
+(function(){
+  var secs=$$('main [data-toc]');
+  var html=secs.map(function(s){
+    return '<li><a href="#'+s.id+'" data-id="'+s.id+'"><span class="n">'+(s.getAttribute('data-no')||'')+'</span><span>'+esc(s.getAttribute('data-toc'))+'</span></a></li>';
+  }).join('');
+  $('#tocList').innerHTML=html; $('#tocListM').innerHTML=html;
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(en){
+        if(en.isIntersecting){$$('.toc a,.toc-m a').forEach(function(a){a.classList.toggle('cur',a.getAttribute('data-id')===en.target.id)})}
+      });
+    },{rootMargin:'-15% 0px -75% 0px'});
+    secs.forEach(function(s){io.observe(s)});
+    var qio=new IntersectionObserver(function(es){
+      es.forEach(function(en){$('#scoreBar').classList.toggle('show',en.isIntersecting)});
+    },{rootMargin:'0px 0px -10% 0px'});
+    qio.observe($('#quiz'));
+  }
+})();
+
+/* ---------- colour mixer ---------- */
+(function(){
+  var R=$('#mxR'),G=$('#mxG'),B=$('#mxB'); if(!R) return;
+  function toHsl(r,g,b){
+    r/=255;g/=255;b/=255;
+    var mx=Math.max(r,g,b),mn=Math.min(r,g,b),h=0,s=0,l=(mx+mn)/2,d=mx-mn;
+    if(d){
+      s=d/(1-Math.abs(2*l-1));
+      if(mx===r) h=((g-b)/d)%6; else if(mx===g) h=(b-r)/d+2; else h=(r-g)/d+4;
+      h*=60; if(h<0) h+=360;
+    }
+    return [Math.round(h),Math.round(s*100),Math.round(l*100)];
+  }
+  function up(){
+    var r=+R.value,g=+G.value,b=+B.value;
+    $('#mxRo').textContent=r; $('#mxGo').textContent=g; $('#mxBo').textContent=b;
+    $('#mxSw').style.background='rgb('+r+','+g+','+b+')';
+    $('#mxRgb').textContent='rgb('+r+', '+g+', '+b+')';
+    $('#mxHex').textContent='#'+[r,g,b].map(function(v){return ('0'+v.toString(16)).slice(-2)}).join('');
+    var hsl=toHsl(r,g,b);
+    $('#mxHsl').textContent='hsl('+hsl[0]+', '+hsl[1]+'%, '+hsl[2]+'%)';
+  }
+  [R,G,B].forEach(function(i){i.addEventListener('input',up)});
+  up();
+})();
+
+/* ---------- quiz ---------- */
+var G1='Bài 1 và 2: HTML và cấu trúc trang',
+    G2='Bài 3 và 4: phần tử và thuộc tính',
+    G3='Bài 5 đến 7: tiêu đề, đoạn văn và style',
+    G4='Bài 8 đến 10: định dạng, trích dẫn và chú thích',
+    G5='Bài 11 và 12: màu sắc và CSS',
+    G6='Bài 13 đến 16: liên kết, ảnh, favicon và tiêu đề trang';
+function Q(g,q,o,a,e){return {g:g,q:q,o:o,a:a,e:e}}
+var QUIZ=[
+Q(G1,'HTML là gì?',['Ngôn ngữ lập trình dùng để tính toán và xử lý logic','Ngôn ngữ đánh dấu, mô tả cấu trúc và nội dung của trang web','Phần mềm dùng để chỉnh sửa ảnh','Hệ quản trị cơ sở dữ liệu'],1,'HTML (HyperText Markup Language) là ngôn ngữ đánh dấu: dùng thẻ để gắn nhãn cho từng phần nội dung. Nó không có biến, điều kiện hay vòng lặp nên không phải ngôn ngữ lập trình.'),
+Q(G1,'Trong bộ ba HTML, CSS và JavaScript, HTML đảm nhiệm vai trò nào?',['Trang trí màu sắc và bố cục','Xử lý tương tác và hành vi','Xây dựng cấu trúc và nội dung','Lưu trữ dữ liệu trên máy chủ'],2,'HTML là khung xương (cấu trúc, nội dung). CSS lo giao diện, JavaScript lo hành vi tương tác.'),
+Q(G1,'Cách nhanh nhất để xem mã nguồn HTML của một trang web đang mở trên Chrome là gì?',['Nhấn Ctrl + U (hoặc chuột phải chọn View page source)','Nhấn Ctrl + P','Nhấn Ctrl + S rồi mở tệp bằng Word','Không thể xem mã nguồn của trang web khác'],0,'Ctrl + U (macOS: Option + Command + U) mở tab chứa mã nguồn. Chuột phải chọn Inspect còn cho phép thử sửa HTML và CSS ngay trên trình duyệt.'),
+Q(G1,'Bạn tạo trang chủ cho một website. Tên tệp nào phù hợp nhất?',['Trang chủ.html','trang chu.html','TRANG CHỦ (final).html','index.html'],3,'Tên tệp nên là chữ thường, không dấu, không khoảng trắng. {{index.html}} còn là tên mà máy chủ web mặc định tìm khi người dùng mở một thư mục.'),
+Q(G1,'Dòng nào phải đứng đầu tiên trong một tài liệu HTML5?',['{{<html lang="vi">}}','{{<!DOCTYPE html>}}','{{<head>}}','{{<body>}}'],1,'{{<!DOCTYPE html>}} cho trình duyệt biết đây là tài liệu HTML5, phải ở dòng đầu tiên và chỉ xuất hiện một lần.'),
+Q(G1,'Nội dung nằm ở đâu thì được hiển thị trong vùng trang của trình duyệt?',['Giữa {{<head>}} và {{</head>}}','Giữa {{<title>}} và {{</title>}}','Ngay sau {{<!DOCTYPE html>}}','Giữa {{<body>}} và {{</body>}}'],3,'Thẻ {{<body>}} chứa toàn bộ nội dung nhìn thấy được. Thẻ {{<head>}} chỉ chứa thông tin về trang.'),
+Q(G1,'Thuộc tính {{lang="vi"}} trên thẻ {{<html>}} có tác dụng gì?',['Khai báo ngôn ngữ của nội dung để trình đọc màn hình, công cụ dịch và tìm kiếm xử lý đúng','Tự động dịch trang sang tiếng Việt','Bắt buộc phải có, thiếu thì trang không mở được','Đổi ngôn ngữ giao diện của trình duyệt'],0,'{{lang}} chỉ khai báo ngôn ngữ của nội dung. Thiếu nó trang vẫn mở được nhưng trình đọc màn hình có thể đọc sai giọng.'),
+Q(G1,'{{<meta charset="UTF-8">}} dùng để làm gì?',['Đặt tiêu đề cho tab trình duyệt','Chặn người khác sao chép nội dung','Khai báo bảng mã UTF-8 để tiếng Việt có dấu hiển thị đúng','Đặt phông chữ mặc định cho trang'],2,'Thiếu khai báo bảng mã, chữ có dấu có thể hiển thị thành ký tự lạ như "Viá»‡t".'),
+
+Q(G2,'Một phần tử HTML đầy đủ gồm những thành phần nào?',['Chỉ thẻ mở','Thẻ mở, nội dung và thẻ đóng','Chỉ nội dung văn bản','Tên thuộc tính và giá trị'],1,'Ví dụ {{<p>Xin chào</p>}} gồm thẻ mở {{<p>}}, nội dung "Xin chào" và thẻ đóng {{</p>}}.'),
+Q(G2,'Thẻ nào sau đây là phần tử rỗng (không có nội dung, không cần thẻ đóng)?',['{{<br>}}','{{<p>}}','{{<h1>}}','{{<strong>}}'],0,'Các phần tử rỗng thường gặp: {{<br>}}, {{<hr>}}, {{<img>}}, {{<meta>}}, {{<link>}}.'),
+Q(G2,'Đoạn mã nào lồng thẻ đúng cách?',['{{<p><strong>Xin chào</p></strong>}}','{{<strong><p>Xin chào</strong></p>}}','{{<p><strong>Xin chào</strong></p>}}','{{<p><strong>Xin chào</p>}}'],2,'Mở sau thì đóng trước, giống hộp nhỏ nằm gọn trong hộp lớn. Các phương án còn lại đóng chéo hoặc thiếu thẻ đóng.'),
+Q(G2,'Nếu bạn quên thẻ đóng {{</p>}}, điều gì thường xảy ra?',['Trình duyệt từ chối hiển thị toàn bộ trang','Trình duyệt luôn tự sửa đúng ý bạn','Chỉ làm trang tải chậm hơn','Trình duyệt tự đoán chỗ đóng, nhưng kết quả có thể sai so với ý định'],3,'Trình duyệt rất khoan dung và cố đoán, nhưng đoán sai là chuyện thường. Hãy luôn tự đóng thẻ.'),
+Q(G2,'Cú pháp thuộc tính nào đúng?',['{{<a href: "trang.html">}}','{{<a href="trang.html">}}','{{<a "href"="trang.html">}}','{{<a=href "trang.html">}}'],1,'Thuộc tính viết dạng {{tên="giá trị"}} bên trong thẻ mở.'),
+Q(G2,'Thuộc tính {{alt}} của thẻ {{<img>}} dùng để làm gì?',['Cung cấp văn bản thay thế khi ảnh không hiển thị, và để trình đọc màn hình mô tả ảnh','Đổi kích thước ảnh','Thêm viền cho ảnh','Đặt tên tệp ảnh'],0,'{{alt}} giúp người dùng trình đọc màn hình biết ảnh nói gì, và hiện ra khi ảnh bị lỗi.'),
+Q(G2,'Thuộc tính nào dùng được trên hầu hết mọi phần tử HTML?',['{{href}}','{{src}}','{{alt}}','{{style}}'],3,'{{style}}, {{title}}, {{id}}, {{class}}, {{lang}} là thuộc tính toàn cục. {{href}} chỉ cho {{<a>}} và {{<link>}}, {{src}} cho {{<img>}} và vài thẻ khác.'),
+Q(G2,'Với {{<p title=Xin chào>Nội dung</p>}}, trình duyệt hiểu giá trị của {{title}} là gì?',['Xin chào','chào','Xin','Không có, trang báo lỗi'],2,'Không có dấu nháy thì giá trị kết thúc ở khoảng trắng đầu tiên. Chữ "chào" bị hiểu là một thuộc tính khác. Vì vậy luôn dùng nháy kép.'),
+
+Q(G3,'Thẻ tiêu đề có mức quan trọng cao nhất là gì?',['{{<h1>}}','{{<h6>}}','{{<head>}}','{{<title>}}'],0,'{{<h1>}} quan trọng nhất, {{<h6>}} thấp nhất. {{<head>}} và {{<title>}} không phải thẻ tiêu đề trong nội dung.'),
+Q(G3,'Vì sao không nên dùng {{<h1>}} chỉ để làm chữ to hơn?',['Vì {{<h1>}} làm trang tải chậm','Vì thẻ tiêu đề mang ý nghĩa cấu trúc; công cụ tìm kiếm và trình đọc màn hình dựa vào nó để hiểu bố cục','Vì {{<h1>}} không hỗ trợ tiếng Việt','Vì trình duyệt sẽ báo lỗi'],1,'Kích thước chữ là việc của CSS. Thẻ tiêu đề dùng để nói "đây là một mục của dàn ý".'),
+Q(G3,'Cách nào ngắt dòng mà không tạo đoạn văn mới?',['{{<lb>}}','{{<break>}}','{{<nl>}}','{{<br>}}'],3,'{{<br>}} là phần tử rỗng dùng để ngắt dòng, phù hợp với thơ, địa chỉ.'),
+Q(G3,'Trong tệp HTML bạn gõ nhiều khoảng trắng và xuống dòng liên tiếp giữa các từ. Trình duyệt hiển thị thế nào?',['Giữ nguyên toàn bộ','Báo lỗi cú pháp','Gộp thành một khoảng trắng','Xoá hết các từ ở giữa'],2,'HTML gộp khoảng trắng liên tiếp. Muốn giữ nguyên, dùng {{<pre>}}; muốn xuống dòng, dùng {{<br>}}.'),
+Q(G3,'Thẻ nào giữ nguyên khoảng trắng và dấu xuống dòng như bạn gõ?',['{{<p>}}','{{<pre>}}','{{<hr>}}','{{<br>}}'],1,'{{<pre>}} (preformatted) hiển thị văn bản đúng như trong mã nguồn, thường với phông chữ đơn cách.'),
+Q(G3,'Cách viết thuộc tính {{style}} nào đúng?',['{{<p style="color: red;">}}','{{<p style=color red>}}','{{<p style="color = red">}}','{{<p color="red">}}'],0,'Bên trong {{style}} là cú pháp CSS: {{thuộc-tính: giá-trị;}}. Dấu hai chấm, không phải dấu bằng.'),
+Q(G3,'Để đổi màu nền bằng {{style}}, bạn dùng thuộc tính CSS nào?',['{{bgcolor}}','{{background-text}}','{{background-color}}','{{color-background}}'],2,'{{background-color}} đổi màu nền, {{color}} đổi màu chữ. {{bgcolor}} là thuộc tính HTML cũ, đã lỗi thời.'),
+Q(G3,'Khai báo nào căn giữa văn bản?',['{{align: middle;}}','{{text-center: true;}}','{{font-align: center;}}','{{text-align: center;}}'],3,'Thuộc tính CSS đúng là {{text-align}} với các giá trị {{left}}, {{center}}, {{right}}.'),
+Q(G3,'Khi CSS nội bộ và thuộc tính {{style}} trên phần tử xung đột, thường bên nào thắng?',['{{style}} trực tiếp trên phần tử','CSS nội bộ','Bên viết trước','Không bên nào'],0,'Style viết trực tiếp có độ ưu tiên cao hơn CSS nội bộ và CSS ngoài (trừ khi có !important).'),
+
+Q(G4,'Thẻ nào biểu thị nội dung quan trọng, thường hiển thị đậm?',['{{<strong>}}','{{<big>}}','{{<bold>}}','{{<heavy>}}'],0,'{{<strong>}} mang ý nghĩa "quan trọng". {{<b>}} cũng đậm nhưng chỉ là hình thức, không thêm ý nghĩa.'),
+Q(G4,'Để viết H₂O với số 2 nhỏ ở phía dưới, bạn dùng thẻ nào?',['{{<sup>}}','{{<small>}}','{{<low>}}','{{<sub>}}'],3,'{{<sub>}} là chỉ số dưới (subscript), {{<sup>}} là chỉ số trên (superscript).'),
+Q(G4,'{{<del>}} và {{<ins>}} thể hiện điều gì?',['Nội dung quan trọng và nội dung nghiêng','Nội dung đã bị xoá (gạch ngang) và nội dung mới thêm (gạch chân)','Chỉ số trên và chỉ số dưới','Chữ nhỏ và chữ lớn'],1,'Cặp thẻ này hay dùng để thể hiện chỉnh sửa, như giá cũ bị gạch và giá mới.'),
+Q(G4,'Thẻ nào dùng cho một khối trích dẫn dài lấy từ nguồn khác?',['{{<q>}}','{{<cite>}}','{{<blockquote>}}','{{<quote>}}'],2,'{{<blockquote>}} cho khối trích dẫn dài, {{<q>}} cho trích dẫn ngắn trong dòng, {{<cite>}} cho tên tác phẩm.'),
+Q(G4,'{{<abbr title="World Health Organization">WHO</abbr>}} có tác dụng gì?',['Cho biết WHO viết tắt của cụm từ đầy đủ, hiện ra khi rê chuột','Biến chữ WHO thành liên kết','Tự động in hoa chữ WHO','Chèn ảnh có tên WHO'],0,'{{<abbr>}} đánh dấu từ viết tắt, thuộc tính {{title}} chứa dạng đầy đủ.'),
+Q(G4,'Cú pháp chú thích trong HTML là gì?',['{{// ghi chú}}','{{/* ghi chú */}}','{{<!-- ghi chú -->}}','{{# ghi chú}}'],2,'Hai kiểu đầu là chú thích của JavaScript và CSS, không dùng cho HTML.'),
+Q(G4,'Nội dung trong chú thích HTML...',['Hiển thị trên trang bằng chữ mờ','Không hiển thị trên trang nhưng vẫn nằm trong mã nguồn mà ai cũng xem được','Bị xoá khi trang được tải','Chỉ hiển thị với quản trị viên'],1,'Vì mã nguồn công khai, đừng ghi thông tin nhạy cảm vào chú thích.'),
+Q(G4,'Khi tìm lỗi, bạn muốn tạm ẩn một đoạn HTML mà không xoá nó. Cách phù hợp là gì?',['Đổi tên thẻ thành chữ hoa','Thêm dấu chấm than vào trước thẻ','Xoá rồi gõ lại sau','Đặt đoạn đó vào trong chú thích {{<!-- ... -->}}'],3,'Bọc đoạn mã trong chú thích là cách nhanh và an toàn để bật tắt.'),
+Q(G4,'Thẻ nào gạch ngang phần chữ đã bị xoá?',['{{<del>}}','{{<ins>}}','{{<mark>}}','{{<small>}}'],0,'{{<del>}} gạch ngang, {{<ins>}} gạch chân phần thêm vào.'),
+Q(G4,'Chú thích {{<!-- ... -->}} có hiện lên trang không?',['Có, chữ mờ','Không, chỉ thấy trong mã nguồn','Chỉ hiện khi rê chuột','Chỉ hiện trên di động'],1,'Trình duyệt bỏ qua chú thích khi vẽ trang.'),
+
+Q(G5,'{{#FF0000}} là màu gì?',['Xanh lá','Xanh dương','Đỏ','Vàng'],2,'{{#RRGGBB}}: FF là 255 (tối đa) cho kênh đỏ, 00 cho hai kênh còn lại, nên là đỏ thuần.'),
+Q(G5,'{{rgba(0, 0, 0, 0.5)}} khác {{rgb(0, 0, 0)}} ở điểm nào?',['Có độ trong suốt (alpha) 50%','Là màu trắng','Là màu xám cố định','Không khác gì'],0,'Chữ "a" là alpha: 0 là trong suốt hoàn toàn, 1 là đặc. Đen với alpha 0,5 nhìn ra xám vì trộn với nền.'),
+Q(G5,'Trong {{hsl(120, 100%, 50%)}}, số 120 biểu thị điều gì?',['Độ sáng','Sắc độ (hue) trên vòng màu, 120 độ là xanh lá','Độ bão hoà','Độ trong suốt'],1,'Sắc độ chạy từ 0 đến 360: 0 là đỏ, 120 là xanh lá, 240 là xanh dương.'),
+Q(G5,'Ba cách thêm CSS vào trang HTML là gì?',['Trực tiếp, gián tiếp, ngẫu nhiên','Thẻ head, thẻ body, thẻ footer','Thẻ title, thẻ meta, thẻ link','Thuộc tính style (inline), thẻ style (nội bộ), tệp .css liên kết (ngoài)'],3,'Chuyên nghiệp nhất là tệp CSS ngoài vì dùng chung cho nhiều trang.'),
+Q(G5,'Đoạn mã nào liên kết một tệp CSS ngoài?',['{{<style src="style.css">}}','{{<css href="style.css">}}','{{<link rel="stylesheet" href="style.css">}}','{{<a rel="stylesheet" href="style.css">}}'],2,'Thẻ {{<link>}} đặt trong {{<head>}}, {{rel="stylesheet"}} cho biết đây là tệp kiểu dáng.'),
+Q(G5,'Một thuộc tính bị khai báo ở cả {{style}} inline và trong thẻ {{<style>}}. Thường cái nào thắng?',['Trong thẻ style','Style inline','Cái nào khai báo trước','Trình duyệt chọn ngẫu nhiên'],1,'Kiểu inline có độ ưu tiên cao hơn quy tắc trong {{<style>}} hay tệp ngoài (trừ khi dùng {{!important}}).'),
+Q(G5,'Mã màu {{#FF0000}} là màu nào?',['Xanh dương','Đỏ','Xanh lá','Vàng'],1,'Hex #RRGGBB: đỏ tối đa, xanh lá và xanh dương bằng 0.'),
+Q(G5,'CSS nội bộ được đặt trong thẻ nào?',['{{<style>}} trong trang','{{<css>}}','{{<script>}}','{{<link>}} luôn'],0,'Thẻ {{<style>}} thường nằm trong {{<head>}}.'),
+
+Q(G6,'Muốn liên kết mở trong tab mới, thêm thuộc tính nào vào {{<a>}}?',['{{target="_blank"}}','{{open="new"}}','{{href="_blank"}}','{{tab="new"}}'],0,'Nên kèm {{rel="noopener"}}: {{<a href="..." target="_blank" rel="noopener">}}.'),
+Q(G6,'Cách viết liên kết gửi email tới ban@example.com là gì?',['{{<a href="ban@example.com">}}','{{<a href="email:ban@example.com">}}','{{<a src="mailto:ban@example.com">}}','{{<a href="mailto:ban@example.com">}}'],3,'Tiền tố {{mailto:}} sẽ mở chương trình email. Tương tự, {{tel:}} dùng cho số điện thoại.'),
+Q(G6,'Một phần tử có {{id="ket-luan"}}. Liên kết nhảy đến nó là gì?',['{{<a href="ket-luan">}}','{{<a href="#ket-luan">}}','{{<a href="@ket-luan">}}','{{<a id="#ket-luan">}}'],1,'Dấu {{#}} trong {{href}} báo hiệu đây là bookmark trỏ tới {{id}} trên trang.'),
+Q(G6,'Đường dẫn {{../css/style.css}} nghĩa là gì?',['Thư mục css nằm bên trong thư mục hiện tại','Tệp ở thư mục gốc của ổ đĩa','Đi lên một thư mục cha rồi vào thư mục css','Địa chỉ của một trang web ngoài'],2,'{{..}} là "đi lên một cấp thư mục", sau đó vào {{css}} lấy tệp {{style.css}}.'),
+Q(G6,'Chữ liên kết nào tốt nhất cho người dùng và trình đọc màn hình?',['Xem bảng học phí','Bấm vào đây','Click here','Link'],0,'Chữ liên kết nên nói rõ đích đến, vì nhiều người nghe danh sách liên kết mà không thấy văn cảnh xung quanh.'),
+Q(G6,'Ảnh chỉ để trang trí, không mang thông tin. Giá trị {{alt}} nên là gì?',['Mô tả thật dài về ảnh','{{alt="hình ảnh"}}','Bỏ hẳn thuộc tính alt','Chuỗi rỗng: {{alt=""}}'],3,'{{alt=""}} báo cho trình đọc màn hình bỏ qua ảnh. Bỏ hẳn {{alt}} có thể khiến nó đọc cả tên tệp.'),
+Q(G6,'Vì sao nên khai báo {{width}} và {{height}} cho {{<img>}}?',['Để ảnh nét hơn','Để trình duyệt dành sẵn chỗ, trang không bị giật nhảy khi ảnh tải xong','Để ảnh tự nén nhẹ hơn','Bắt buộc, thiếu là lỗi cú pháp'],1,'Biết trước kích thước, trình duyệt giữ chỗ ngay từ đầu nên bố cục không bị đẩy xuống khi ảnh xuất hiện.'),
+Q(G6,'Nội dung thẻ {{<title>}} của trang KHÔNG hiển thị ở đâu?',['Tab của trình duyệt','Kết quả tìm kiếm','Ngay trong vùng nội dung trang như một tiêu đề lớn','Tên mặc định khi lưu dấu trang'],2,'Tiêu đề lớn trong nội dung là việc của {{<h1>}}. {{<title>}} nằm trong {{<head>}} nên không hiện trong vùng nội dung.'),
+Q(G6,'Favicon được khai báo ở đâu, bằng cách nào?',['Trong {{<head>}}, bằng {{<link rel="icon" href="favicon.svg">}}','Trong {{<body>}}, bằng {{<img class="favicon">}}','Bên trong thẻ {{<title>}}','Không cần khai báo, luôn tự có'],0,'Favicon khai báo bằng {{<link rel="icon">}} trong {{<head>}}. Nhiều trình duyệt tự tìm {{/favicon.ico}} nếu bạn không khai báo.'),
+Q(G6,'Cách đặt {{<title>}} nào tốt nhất?',['Để trống cho gọn','Dùng chung tiêu đề "Trang chủ" cho mọi trang','Nhồi thật nhiều từ khoá','Ngắn gọn, mô tả đúng nội dung riêng của từng trang'],3,'Mỗi trang một tiêu đề riêng, ngắn (khoảng 50 đến 60 ký tự), phần quan trọng đặt trước.'),
+Q(G6,'Thuộc tính nào mô tả ảnh khi ảnh không tải được?',['{{alt}}','{{title}}','{{src}}','{{href}}'],0,'{{alt}} còn giúp người dùng trình đọc màn hình.'),
+Q(G6,'Đặt {{width}} và {{height}} cho ảnh có lợi gì?',['Giữ chỗ trước nên trang không bị giật bố cục khi ảnh tải xong','Ảnh nét hơn','Ảnh tải nhanh gấp đôi','Không có lợi gì'],0,'Trình duyệt biết kích thước từ đầu nên dành sẵn chỗ.'),
+Q(G6,'Favicon được khai báo bằng thẻ nào?',['{{<link rel="icon" href="...">}}','{{<img rel="icon">}}','{{<meta icon>}}','{{<title icon>}}'],0,'Thẻ {{<link>}} trong {{<head>}}.'),
+Q(G6,'Độ dài hợp lý của {{<title>}} là khoảng bao nhiêu?',['Dưới 60 ký tự','Trên 200 ký tự','Đúng 1 ký tự','Không giới hạn nên viết cả bài'],0,'Quá dài sẽ bị cắt ở tab và kết quả tìm kiếm.'),
+Q(G6,'Khi dùng {{target="_blank"}}, nên thêm gì để an toàn hơn?',['{{rel="noopener"}}','{{rel="open"}}','{{lang="vi"}}','{{download}}'],0,'Ngăn trang mở ra truy cập ngược về trang gốc.'),
+];
+
+var quizList=$('#quizList'), answered=0, right=0, results=[];
+function updateScore(){$('#scoreText').textContent='Trắc nghiệm: đã làm '+answered+'/'+QUIZ.length+', đúng '+right}
+function buildQuiz(){
+  quizList.innerHTML=''; $('#quizSummary').innerHTML=''; answered=0; right=0; results=[];
+  var last='';
+  QUIZ.forEach(function(it,i){
+    if(it.g!==last){last=it.g; var h=document.createElement('h3'); h.className='q-group'; h.textContent=it.g; quizList.appendChild(h)}
+    var art=document.createElement('article'); art.className='q';
+    art.innerHTML='<p class="q-text"><span class="q-no">Câu '+(i+1)+'.</span>'+fmt(it.q)+'</p><div class="opts">'+it.o.map(function(o,k){
+      return '<button type="button" class="opt" data-k="'+k+'"><span class="k">'+'ABCD'.charAt(k)+'</span><span class="ot">'+fmt(o)+'</span></button>';
+    }).join('')+'</div><div class="q-exp" role="status" hidden></div>';
+    art.addEventListener('click',function(e){
+      var b=e.target.closest('.opt'); if(!b||art.getAttribute('data-done')) return;
+      art.setAttribute('data-done','1');
+      var k=+b.getAttribute('data-k'), ok=(k===it.a);
+      $$('.opt',art).forEach(function(x,j){
+        x.disabled=true;
+        if(j===it.a){x.classList.add('right'); x.insertAdjacentHTML('beforeend','<span class="mark">Đáp án đúng</span>')}
+        else if(j===k){x.classList.add('wrong'); x.insertAdjacentHTML('beforeend','<span class="mark">Bạn chọn</span>')}
+      });
+      var ex=$('.q-exp',art); ex.hidden=false;
+      ex.innerHTML='<strong>'+(ok?'Đúng.':'Chưa đúng. Đáp án là '+'ABCD'.charAt(it.a)+'.')+'</strong> '+fmt(it.e);
+      answered++; if(ok) right++; results[i]=ok; updateScore();
+      if(answered===QUIZ.length) showSummary();
+    });
+    quizList.appendChild(art);
+  });
+  updateScore();
+}
+function showSummary(){
+  var pct=Math.round(right*100/QUIZ.length), miss={}, list=[];
+  if(!(+store.get('h1:qbest')>=pct)) store.set('h1:qbest',String(pct));
+  QUIZ.forEach(function(it,i){if(results[i]===false) miss[it.g]=(miss[it.g]||0)+1});
+  Object.keys(miss).forEach(function(g){list.push('<li>'+esc(g)+': sai '+miss[g]+' câu</li>')});
+  var msg=pct>=90?'Xuất sắc. Bạn nắm chắc nền tảng HTML.':(pct>=70?'Khá tốt. Xem lại các nhóm dưới đây rồi làm lại để chắc hơn.':'Chưa vững. Hãy đọc lại các bài liên quan, thử lại ví dụ trong khung mã rồi làm lại.');
+  var box=$('#quizSummary');
+  box.innerHTML='<div class="summary"><h3>Kết quả: '+right+'/'+QUIZ.length+' câu đúng ('+pct+'%)</h3><p>'+msg+'</p>'+(list.length?'<p>Nhóm cần ôn lại:</p><ul>'+list.join('')+'</ul>':'')+'<button type="button" class="btn primary" id="quizAgain">Làm lại từ đầu</button></div>';
+  $('#quizAgain').addEventListener('click',function(){buildQuiz(); $('#quiz').scrollIntoView()});
+  box.scrollIntoView({block:'nearest'});
+}
+buildQuiz();
+
+/* ---------- exercises ---------- */
+var cnt=function(s,re){return (s.match(re)||[]).length};
+var txt=function(n){return ((n&&n.textContent)||'').trim()};
+var sty=function(el,re){return !!el&&re.test(el.getAttribute('style')||'')};
+var levels=function(d){return $$('h1,h2,h3,h4,h5,h6',d).map(function(h){return +h.tagName.charAt(1)})};
+var noSkip=function(d){var l=levels(d); return l.length>0&&l.every(function(v,i){return i===0?v===1:v<=l[i-1]+1})};
+var prevTxt=function(n){return ((n.previousSibling&&n.previousSibling.textContent)||'').trim()};
+var DOC_HEAD='<!DOCTYPE html>\n<html lang="vi">\n<head>\n  <meta charset="UTF-8">\n  <title>Bài tập</title>\n</head>\n<body>\n';
+var DOC_TAIL='\n</body>\n</html>';
+var FILES_NOTE='<p class="ex-files">Tệp có sẵn trong khung xem trước: <code>avatar.svg</code>, <code>mountain.svg</code>, <code>favicon.svg</code>.</p>';
+
+var EX=[
+{id:'ex1',title:'Sửa trang bị lỗi',ch:'Liên quan: bài 2, 3',h:270,
+ brief:'<p>Trang dưới đây có nhiều lỗi cấu trúc. Hãy sửa để nó đạt chuẩn HTML5 và đáp ứng mọi yêu cầu.</p>',
+ starter:'<html>\n<head>\n  <title></title>\n</head>\n<body>\n  <h1>Quán cà phê Mộc<h1>\n  <p>Chào mừng bạn đến với quán.\n  <p>Chúng tôi mở cửa từ 7 giờ sáng đến 10 giờ tối.</p>\n</body>\n</html>',
+ solution:'<!DOCTYPE html>\n<html lang="vi">\n<head>\n  <meta charset="UTF-8">\n  <title>Quán cà phê Mộc</title>\n</head>\n<body>\n  <h1>Quán cà phê Mộc</h1>\n  <p>Chào mừng bạn đến với quán.</p>\n  <p>Chúng tôi mở cửa từ 7 giờ sáng đến 10 giờ tối.</p>\n</body>\n</html>',
+ hint:'Đọc từng dòng: đầu tệp đang thiếu gì? Thẻ nào chưa có thẻ đóng đúng? Thẻ title đang trống. Nhớ rằng thẻ đóng có dấu gạch chéo.',
+ checks:[
+  ['Tệp bắt đầu bằng <!DOCTYPE html>',function(d,r){return /^\s*<!doctype html>/i.test(r)}],
+  ['Thẻ <html> có lang="vi"',function(d){return /^vi/i.test(d.documentElement.getAttribute('lang')||'')}],
+  ['Có <meta charset="UTF-8"> trong <head>',function(d){var m=d.head.querySelector('meta[charset]'); return !!m&&/^utf-?8$/i.test(m.getAttribute('charset'))}],
+  ['<title> có nội dung',function(d){return d.title.trim().length>=3}],
+  ['Chỉ có một <h1>, mở và đóng đúng',function(d,r){return cnt(r,/<h1[\s>]/gi)===1&&cnt(r,/<\/h1>/gi)===1}],
+  ['Mọi thẻ <p> đều có thẻ đóng </p>',function(d,r){var o=cnt(r,/<p[\s>]/gi); return o>=2&&o===cnt(r,/<\/p>/gi)}]
+ ]},
+{id:'ex2',title:'Tiêu đề và đoạn văn',ch:'Liên quan: bài 5, 6',h:300,
+ brief:'<p>Viết trang giới thiệu về một địa điểm, món ăn hoặc sở thích bạn thích. Nội dung tự chọn, nhưng cấu trúc phải đúng.</p>',
+ starter:DOC_HEAD+'  <!-- Viết nội dung của bạn ở đây -->'+DOC_TAIL,
+ solution:'<!DOCTYPE html>\n<html lang="vi">\n<head>\n  <meta charset="UTF-8">\n  <title>Đà Lạt, thành phố ngàn hoa</title>\n</head>\n<body>\n  <h1>Đà Lạt, thành phố ngàn hoa</h1>\n  <p>Đà Lạt nằm trên cao nguyên Lâm Viên, khí hậu mát mẻ quanh năm.</p>\n\n  <h2>Đi đâu</h2>\n  <p>Hồ Xuân Hương, đồi chè Cầu Đất và thung lũng hoa là những điểm dừng chân quen thuộc.</p>\n  <hr>\n\n  <h2>Ăn gì</h2>\n  <p>Bánh tráng nướng, sữa đậu nành nóng<br>và lẩu gà lá é vào buổi tối se lạnh.</p>\n</body>\n</html>',
+ hint:'Bắt đầu bằng một h1, sau đó mỗi mục lớn là một h2 kèm đoạn p. Muốn xuống dòng trong đoạn thì dùng br, muốn kẻ ngang giữa hai mục thì dùng hr.',
+ checks:[
+  ['Có đúng một <h1> có nội dung',function(d){var h=$$('h1',d); return h.length===1&&txt(h[0]).length>2}],
+  ['Có ít nhất hai <h2>',function(d){return $$('h2',d).length>=2}],
+  ['Có ít nhất ba đoạn <p>, mỗi đoạn có chữ',function(d){var p=$$('p',d); return p.length>=3&&p.every(function(x){return txt(x).length>10})}],
+  ['Có ít nhất một đường kẻ <hr>',function(d){return !!d.querySelector('hr')}],
+  ['Có <br> ngắt dòng bên trong một đoạn văn',function(d){return !!d.querySelector('p br')}],
+  ['Các cấp tiêu đề không nhảy cấp (h1, rồi h2, rồi h3...)',function(d){return levels(d).length>=3&&noSkip(d)}]
+ ]},
+{id:'ex3',title:'Định dạng văn bản',ch:'Liên quan: bài 8',h:300,
+ brief:'<p>Dựng lại nội dung sau bằng thẻ định dạng phù hợp ý nghĩa:</p><ul><li>Dòng 1: "Nước có công thức H2O", số 2 nhỏ ở dưới.</li><li>Dòng 2: "Diện tích hình vuông cạnh x là x2", số 2 nhỏ ở trên.</li><li>Dòng 3: "Giá cũ 200.000đ, giá mới 150.000đ". Giá cũ bị gạch ngang, giá mới được đánh dấu là nội dung thêm vào.</li><li>Dòng 4: một câu có cụm từ rất quan trọng và một từ cần nhấn giọng.</li><li>Dòng 5: một cụm từ được tô sáng, kèm một ghi chú bằng chữ nhỏ.</li><li>Không dùng <code>&lt;b&gt;</code> hay <code>&lt;i&gt;</code>.</li></ul>',
+ starter:DOC_HEAD+'  <h1>Phiếu khuyến mãi</h1>\n  <!-- Viết năm dòng nội dung ở đây -->'+DOC_TAIL,
+ solution:'<!DOCTYPE html>\n<html lang="vi">\n<head>\n  <meta charset="UTF-8">\n  <title>Phiếu khuyến mãi</title>\n</head>\n<body>\n  <h1>Phiếu khuyến mãi</h1>\n  <p>Nước có công thức H<sub>2</sub>O.</p>\n  <p>Diện tích hình vuông cạnh x là x<sup>2</sup>.</p>\n  <p>Giá cũ <del>200.000đ</del>, giá mới <ins>150.000đ</ins>.</p>\n  <p>Chương trình <strong>chỉ diễn ra trong hôm nay</strong>, hãy <em>đến sớm</em> nhé.</p>\n  <p>Mua hai tặng một cho <mark>mọi sản phẩm cà phê</mark>. <small>Áp dụng tại cửa hàng, không cộng dồn ưu đãi khác.</small></p>\n</body>\n</html>',
+ hint:'Chỉ số dưới là sub, chỉ số trên là sup. Cụm rất quan trọng dùng strong, từ nhấn giọng dùng em. Đặt thẻ ngay sát chữ cần định dạng, ví dụ H<sub>2</sub>O.',
+ checks:[
+  ['Số 2 trong H2O nằm trong <sub>',function(d){return $$('sub',d).some(function(s){return txt(s)==='2'&&/H$/.test(prevTxt(s))})}],
+  ['Số 2 trong x2 nằm trong <sup>',function(d){return $$('sup',d).some(function(s){return txt(s)==='2'&&/x$/i.test(prevTxt(s))})}],
+  ['Giá cũ 200.000đ nằm trong <del>',function(d){return $$('del',d).some(function(s){return /200[.,]?000/.test(txt(s))})}],
+  ['Giá mới 150.000đ nằm trong <ins>',function(d){return $$('ins',d).some(function(s){return /150[.,]?000/.test(txt(s))})}],
+  ['Dùng cả <strong> và <em>',function(d){return !!d.querySelector('strong')&&!!d.querySelector('em')}],
+  ['Dùng cả <mark> và <small>',function(d){return !!d.querySelector('mark')&&!!d.querySelector('small')}],
+  ['Không dùng <b> hoặc <i>',function(d){return !d.querySelector('b,i')}]
+ ]},
+{id:'ex4',title:'Style và màu sắc',ch:'Liên quan: bài 7, 11',h:300,
+ brief:'<p>Trang cửa hàng hoa dưới đây đang trơn tru. Hãy trang trí chỉ bằng thuộc tính <code>style</code> trực tiếp trên phần tử (chưa dùng thẻ <code>&lt;style&gt;</code>).</p>',
+ starter:'<!DOCTYPE html>\n<html lang="vi">\n<head>\n  <meta charset="UTF-8">\n  <title>Cửa hàng hoa Sen</title>\n</head>\n<body>\n  <h1>Cửa hàng hoa Sen</h1>\n  <p>Hoa tươi mỗi ngày, giao tận nơi.</p>\n  <p>Đặt hoa trước 15 giờ để nhận trong ngày.</p>\n</body>\n</html>',
+ solution:'<!DOCTYPE html>\n<html lang="vi">\n<head>\n  <meta charset="UTF-8">\n  <title>Cửa hàng hoa Sen</title>\n</head>\n<body style="background-color: #FFF4F0;">\n  <h1 style="color: rgb(190, 40, 80); text-align: center;">Cửa hàng hoa Sen</h1>\n  <p style="font-family: Verdana, sans-serif; font-size: 18px; color: hsl(210, 60%, 30%);">Hoa tươi mỗi ngày, giao tận nơi.</p>\n  <p style="color: hsl(150, 50%, 28%);">Đặt hoa trước 15 giờ để nhận trong ngày.</p>\n</body>\n</html>',
+ hint:'Gắn style lên thẻ body cho nền, lên h1 cho màu chữ và căn giữa, lên p cho phông chữ. Mỗi khai báo kết thúc bằng dấu chấm phẩy, ví dụ style="color: rgb(190, 40, 80); text-align: center;".',
+ checks:[
+  ['<body> có nền background-color dạng HEX (ví dụ #FFF4F0)',function(d){return sty(d.body,/background-color\s*:\s*#[0-9a-f]{3,8}\b/i)}],
+  ['<h1> có màu chữ dạng rgb()',function(d){return sty(d.querySelector('h1'),/(^|;|\s)color\s*:\s*rgba?\(/i)}],
+  ['Ít nhất một <p> có màu chữ dạng hsl()',function(d){return $$('p',d).some(function(p){return sty(p,/(^|;|\s)color\s*:\s*hsla?\(/i)})}],
+  ['<h1> được căn giữa (text-align: center)',function(d){return sty(d.querySelector('h1'),/text-align\s*:\s*center/i)}],
+  ['Ít nhất một <p> đặt font-family',function(d){return $$('p',d).some(function(p){return sty(p,/font-family\s*:/i)})}],
+  ['Ít nhất một <p> đặt font-size bằng px',function(d){return $$('p',d).some(function(p){return sty(p,/font-size\s*:\s*\d+(\.\d+)?px/i)})}]
+ ]},
+{id:'ex5',title:'Liên kết',ch:'Liên quan: bài 4, 13',h:330,
+ brief:'<p>Trang có sẵn ba mục. Hãy thay các chú thích bằng liên kết thật và gán <code>id</code> cho mục cần nhảy tới.</p>',
+ starter:DOC_HEAD.replace('Bài tập','Tài nguyên học HTML')+'  <h1>Tài nguyên học HTML</h1>\n\n  <h2>Mục lục</h2>\n  <p><!-- Liên kết nhảy tới mục Liên hệ (cùng trang) --></p>\n\n  <h2>Học thêm</h2>\n  <p><!-- Liên kết ngoài tới https://developer.mozilla.org/ , mở ở tab mới --></p>\n\n  <h2>Liên hệ</h2>\n  <p><!-- Liên kết gửi email và liên kết gọi điện --></p>'+DOC_TAIL,
+ solution:'<!DOCTYPE html>\n<html lang="vi">\n<head>\n  <meta charset="UTF-8">\n  <title>Tài nguyên học HTML</title>\n</head>\n<body>\n  <h1>Tài nguyên học HTML</h1>\n\n  <h2>Mục lục</h2>\n  <p><a href="#lien-he" title="Nhảy tới phần liên hệ">Đi tới phần Liên hệ</a></p>\n\n  <h2>Học thêm</h2>\n  <p><a href="https://developer.mozilla.org/" target="_blank" rel="noopener">Tài liệu MDN Web Docs</a></p>\n\n  <h2 id="lien-he">Liên hệ</h2>\n  <p><a href="mailto:ban@example.com">Gửi email cho tôi</a> hoặc <a href="tel:+84900000000">gọi điện</a>.</p>\n</body>\n</html>',
+ hint:'Liên kết nhảy trong trang cần hai phần: href="#ten" ở chỗ bấm, và id="ten" ở phần tử đích. Liên kết mở tab mới cần target="_blank" và rel="noopener". Email dùng mailto:, điện thoại dùng tel:.',
+ checks:[
+  ['Có liên kết https:// mở ở tab mới (target="_blank")',function(d){return $$('a[href^="https://"]',d).some(function(a){return a.getAttribute('target')==='_blank'})}],
+  ['Liên kết mở tab mới đó có rel chứa noopener',function(d){return $$('a[href^="https://"]',d).some(function(a){return a.getAttribute('target')==='_blank'&&/noopener/.test(a.getAttribute('rel')||'')})}],
+  ['Có liên kết mailto:',function(d){return !!d.querySelector('a[href^="mailto:"]')}],
+  ['Có liên kết tel:',function(d){return !!d.querySelector('a[href^="tel:"]')}],
+  ['Có bookmark: href="#..." trỏ tới một id có thật trong trang',function(d){return $$('a[href^="#"]',d).some(function(a){var h=a.getAttribute('href'); return h.length>1&&!!d.getElementById(h.slice(1))})}],
+  ['Có ít nhất một liên kết có thuộc tính title',function(d){return !!d.querySelector('a[title]')}],
+  ['Chữ liên kết có nghĩa (không viết "bấm vào đây", "click here")',function(d){var a=$$('a',d); return a.length>0&&a.every(function(x){return txt(x).length>=3&&!/(bấm|nhấn|click)\s*(vào\s*)?(đây|here)/i.test(txt(x))})}]
+ ]},
+{id:'ex6',title:'Hình ảnh',ch:'Liên quan: bài 14',h:330,
+ brief:'<p>Xây dựng một trang trưng bày ảnh, dùng các tệp có sẵn để thực hành thuộc tính ảnh, chú thích và ảnh làm liên kết.</p>'+FILES_NOTE,
+ starter:DOC_HEAD.replace('Bài tập','Bộ sưu tập ảnh')+'  <h1>Bộ sưu tập ảnh</h1>\n  <!-- Thêm ảnh và chú thích ở đây -->'+DOC_TAIL,
+ solution:'<!DOCTYPE html>\n<html lang="vi">\n<head>\n  <meta charset="UTF-8">\n  <title>Bộ sưu tập ảnh</title>\n</head>\n<body>\n  <h1>Bộ sưu tập ảnh</h1>\n  <img src="mountain.svg" alt="Dãy núi xanh dưới ánh mặt trời" width="240" height="150">\n\n  <figure>\n    <img src="avatar.svg" alt="Ảnh đại diện màu xanh" width="96" height="96">\n    <figcaption>Hình 1: ảnh đại diện của tôi.</figcaption>\n  </figure>\n\n  <p><a href="https://example.com"><img src="mountain.svg" alt="Xem thêm ảnh trên example.com" width="120" height="75"></a></p>\n\n  <img src="khong-co.jpg" alt="Ảnh này chưa có, chữ alt hiện thay thế">\n</body>\n</html>',
+ hint:'Ảnh trong figure gồm hai con: img và figcaption. Ảnh làm liên kết thì đặt img vào bên trong thẻ a. Ảnh cố tình sai đường dẫn vẫn cần alt để người xem biết nó là gì.',
+ checks:[
+  ['Ảnh mountain.svg có alt mô tả (từ 8 ký tự)',function(d){var i=d.querySelector('img[src="mountain.svg"]'); return !!i&&(i.getAttribute('alt')||'').trim().length>=8}],
+  ['Ảnh mountain.svg khai báo cả width và height (số nguyên)',function(d){var i=d.querySelector('img[src="mountain.svg"]'); return !!i&&/^\d+$/.test(i.getAttribute('width')||'')&&/^\d+$/.test(i.getAttribute('height')||'')}],
+  ['Ảnh avatar.svg nằm trong <figure> có <figcaption> kèm chữ',function(d){var f=d.querySelector('figure'); return !!f&&!!f.querySelector('img[src="avatar.svg"]')&&txt(f.querySelector('figcaption')).length>3}],
+  ['Có một ảnh làm liên kết (<img> nằm trong <a href>)',function(d){return !!d.querySelector('a[href] img')}],
+  ['Có ảnh src="khong-co.jpg" (sai đường dẫn) và vẫn có alt',function(d){var i=d.querySelector('img[src="khong-co.jpg"]'); return !!i&&(i.getAttribute('alt')||'').trim().length>=5}]
+ ]},
+{id:'ex7',title:'Trích dẫn và chú thích',ch:'Liên quan: bài 9, 10',h:330,
+ brief:'<p>Viết trang "Góc trích dẫn" dùng đủ các thẻ trích dẫn và chú thích trong mã.</p>',
+ starter:DOC_HEAD.replace('Bài tập','Góc trích dẫn')+'  <h1>Góc trích dẫn</h1>\n  <!-- Viết nội dung của bạn ở đây -->'+DOC_TAIL,
+ solution:'<!DOCTYPE html>\n<html lang="vi">\n<head>\n  <meta charset="UTF-8">\n  <title>Góc trích dẫn</title>\n</head>\n<body>\n  <h1>Góc trích dẫn</h1>\n  <!-- Phần trích dẫn dài -->\n  <blockquote cite="https://example.com/bai-viet">\n    Học lập trình giống như học đi xe đạp: phải tự đạp mới nhớ.\n  </blockquote>\n  <p>Mình học <abbr title="HyperText Markup Language">HTML</abbr> để <q>tự tay làm một trang web</q>.</p>\n  <p>Đọc thêm trong cuốn <cite>Lập trình web cho người mới</cite>.</p>\n  <address>\n    Liên hệ: Nguyễn Văn A<br>\n    Hà Nội\n  </address>\n  <!-- <p>Đoạn này tạm ẩn để kiểm tra lỗi.</p> -->\n</body>\n</html>',
+ hint:'blockquote cần thuộc tính cite (địa chỉ nguồn) và một câu đủ dài. q phải nằm trong một đoạn p. abbr cần thuộc tính title. Để tạm ẩn mã, đặt cả thẻ vào trong <!-- và -->.',
+ checks:[
+  ['Có <blockquote> với thuộc tính cite và nội dung từ 15 ký tự',function(d){var b=d.querySelector('blockquote[cite]'); return !!b&&txt(b).length>=15}],
+  ['Có <q> nằm trong một đoạn <p>',function(d){return !!d.querySelector('p q')}],
+  ['Có <abbr> với thuộc tính title',function(d){return !!d.querySelector('abbr[title]')}],
+  ['Có <cite> ghi tên một tác phẩm',function(d){return !!d.querySelector('cite')&&txt(d.querySelector('cite')).length>2}],
+  ['Có <address> thông tin liên hệ',function(d){return !!d.querySelector('address')}],
+  ['Có ít nhất một chú thích HTML',function(d,r){return /<!--[\s\S]*?-->/.test(r)}],
+  ['Có một đoạn mã đang được "ẩn" trong chú thích (ví dụ <!-- <p>...</p> -->)',function(d,r){return /<!--\s*<[a-z]/i.test(r)}]
+ ]},
+{id:'ex8',title:'Dự án: trang giới thiệu bản thân',ch:'Tổng hợp: bài 2 đến 16',h:380,
+ brief:'<p>Bài tập cuối giai đoạn. Xây dựng một trang giới thiệu bản thân hoàn chỉnh, tự chọn nội dung. Trang phải đủ cấu trúc chuẩn và dùng những thẻ đã học.</p>'+FILES_NOTE,
+ starter:'<!DOCTYPE html>\n<html>\n<head>\n  <title></title>\n</head>\n<body>\n  <!-- Xây dựng trang giới thiệu bản thân của bạn -->\n</body>\n</html>',
+ solution:'<!DOCTYPE html>\n<html lang="vi">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>Minh Anh - Sinh viên học HTML</title>\n  <link rel="icon" href="favicon.svg" type="image/svg+xml">\n</head>\n<body style="background-color: #F4F7FF;">\n  <!-- Đầu trang -->\n  <h1 style="color: #2A3FC7;">Xin chào, mình là Minh Anh</h1>\n  <img src="avatar.svg" alt="Ảnh đại diện của Minh Anh" width="96" height="96">\n  <p>Mình đang học <strong>HTML</strong> với mục tiêu tự làm được một website.</p>\n  <p><a href="#so-thich">Xem sở thích</a> hoặc <a href="mailto:minhanh@example.com">gửi email cho mình</a></p>\n\n  <h2>Về mình</h2>\n  <p>Mình thích <em>đọc sách</em>, chụp ảnh và <mark>khám phá công nghệ mới</mark>.</p>\n  <blockquote cite="https://example.com">Học mỗi ngày một chút, cuối tuần sẽ thấy khác biệt.</blockquote>\n\n  <h2 id="so-thich" style="color: rgb(200, 60, 50);">Sở thích</h2>\n  <p>Cuối tuần mình thường đi dạo và viết mã.<br>Nếu bạn cùng sở thích, hãy làm quen nhé.</p>\n  <p>Tài liệu mình dùng: <a href="https://developer.mozilla.org/" target="_blank" rel="noopener">MDN Web Docs</a>.</p>\n</body>\n</html>',
+ hint:'Chia trang thành ba khối: đầu trang (h1, ảnh, liên kết), phần giới thiệu (h2, đoạn văn, trích dẫn) và phần sở thích (h2 có id). Làm từng yêu cầu một và nhấn Kiểm tra sau mỗi bước để biết mình đang ở đâu.',
+ checks:[
+  ['Có <!DOCTYPE html> ở đầu, <html lang="vi">, <meta charset="UTF-8">',function(d,r){var m=d.head.querySelector('meta[charset]'); return /^\s*<!doctype html>/i.test(r)&&/^vi/i.test(d.documentElement.getAttribute('lang')||'')&&!!m&&/^utf-?8$/i.test(m.getAttribute('charset'))}],
+  ['<title> riêng cho trang (từ 8 ký tự)',function(d){return d.title.trim().length>=8}],
+  ['Có favicon: <link rel="icon" href="...">',function(d){return !!d.querySelector('link[rel~="icon"][href]')}],
+  ['Đúng một <h1> và ít nhất hai <h2>, không nhảy cấp',function(d){return $$('h1',d).length===1&&$$('h2',d).length>=2&&noSkip(d)}],
+  ['Có ít nhất ba đoạn <p> có nội dung',function(d){var p=$$('p',d); return p.length>=3&&p.every(function(x){return txt(x).length>5})}],
+  ['Ảnh avatar.svg có alt (từ 5 ký tự), width và height',function(d){var i=d.querySelector('img[src="avatar.svg"]'); return !!i&&(i.getAttribute('alt')||'').trim().length>=5&&i.hasAttribute('width')&&i.hasAttribute('height')}],
+  ['Có liên kết ngoài mở tab mới kèm rel="noopener"',function(d){return $$('a[href^="http"]',d).some(function(a){return a.getAttribute('target')==='_blank'&&/noopener/.test(a.getAttribute('rel')||'')})}],
+  ['Có bookmark trỏ tới một id có thật',function(d){return $$('a[href^="#"]',d).some(function(a){var h=a.getAttribute('href'); return h.length>1&&!!d.getElementById(h.slice(1))})}],
+  ['Có liên kết mailto:',function(d){return !!d.querySelector('a[href^="mailto:"]')}],
+  ['Dùng <strong> hoặc <em> để nhấn mạnh',function(d){return !!d.querySelector('strong,em')}],
+  ['Dùng <mark>, <q> hoặc <blockquote>',function(d){return !!d.querySelector('mark,q,blockquote')}],
+  ['Có ít nhất một chú thích HTML',function(d,r){return /<!--[\s\S]*?-->/.test(r)}],
+  ['Ít nhất hai phần tử có màu qua style (HEX, rgb hoặc hsl)',function(d){return $$('[style]',d).filter(function(e){return /(#[0-9a-f]{3,8}\b|rgba?\(|hsla?\()/i.test(e.getAttribute('style'))}).length>=2}]
+ ]},
+{id:'y3',mount:'y3',no:'Bài tập nhanh',title:'Phần tử lồng nhau',ch:'Sau bài 3',h:230,brief:"<p>Viết một <code>h1</code> và một đoạn <code>p</code> chứa <code>strong</code> và <code>em</code> lồng đúng, có xuống dòng <code>br</code>, rồi một đường kẻ <code>hr</code>.</p>",starter:DOC_HEAD+'  <!-- Viết bài làm ở đây -->'+DOC_TAIL,hint:'Làm lần lượt từng dòng yêu cầu bên dưới rồi bấm Kiểm tra.',solution:"<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Bài làm</title>\n</head>\n<body>\n<h1>Phần tử lồng nhau</h1>\n<p>Đây là <strong>chữ đậm</strong> và <em>chữ nghiêng</em>.<br>Dòng mới sau br.</p>\n<hr>\n</body>\n</html>",checks:[
+  ['strong và em nằm trong p',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('p strong')&&h('p em'))}],
+  ['Có br và hr',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('br')&&h('hr'))}],
+  ['Mọi thẻ p đều đóng',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!((r.match(/<p[\s>]/gi)||[]).length===(r.match(/<\/p>/gi)||[]).length&&n('p')>=1)}]
+ ]},
+{id:'y4',mount:'y4',no:'Bài tập nhanh',title:'Thuộc tính',ch:'Sau bài 4',h:230,brief:"<p>Tạo một liên kết có <code>href</code> và <code>title</code>, một ảnh có <code>alt</code>, và một đoạn tiếng Anh đặt <code>lang=\"en\"</code>.</p>",starter:DOC_HEAD+'  <!-- Viết bài làm ở đây -->'+DOC_TAIL,hint:'Làm lần lượt từng dòng yêu cầu bên dưới rồi bấm Kiểm tra.',solution:"<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Bài làm</title>\n</head>\n<body>\n<a href=\"https://www.example.com\" title=\"Trang ví dụ\">Ví dụ</a>\n<img src=\"avatar.svg\" alt=\"Ảnh đại diện\" width=\"80\">\n<p lang=\"en\">Hello, world!</p>\n</body>\n</html>",checks:[
+  ['Liên kết có href và title',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('a[href][title]'))}],
+  ['Ảnh có alt nội dung',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('img[alt]')&&d.querySelector('img').alt.length>2)}],
+  ['Đoạn p có lang=en',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('p[lang=en]'))}]
+ ]},
+{id:'y5',mount:'y5',no:'Bài tập nhanh',title:'Dàn ý bằng tiêu đề',ch:'Sau bài 5',h:230,brief:"<p>Dựng dàn ý gồm một <code>h1</code>, hai <code>h2</code> và ít nhất một <code>h3</code>, không nhảy cấp.</p>",starter:DOC_HEAD+'  <!-- Viết bài làm ở đây -->'+DOC_TAIL,hint:'Làm lần lượt từng dòng yêu cầu bên dưới rồi bấm Kiểm tra.',solution:"<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Bài làm</title>\n</head>\n<body>\n<h1>Học web</h1>\n<h2>HTML</h2>\n<h3>Thẻ cơ bản</h3>\n<h2>CSS</h2>\n</body>\n</html>",checks:[
+  ['Đúng một h1',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(n('h1')===1)}],
+  ['Ít nhất hai h2',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(n('h2')>=2)}],
+  ['Có h3',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('h3'))}],
+  ['Không nhảy cấp tiêu đề',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(noSkip(d))}]
+ ]},
+{id:'y6',mount:'y6',no:'Bài tập nhanh',title:'Đoạn văn và pre',ch:'Sau bài 6',h:230,brief:"<p>Viết bài thơ ngắn giữ nguyên xuống dòng bằng <code>pre</code>, và một đoạn <code>p</code> có <code>br</code>.</p>",starter:DOC_HEAD+'  <!-- Viết bài làm ở đây -->'+DOC_TAIL,hint:'Làm lần lượt từng dòng yêu cầu bên dưới rồi bấm Kiểm tra.',solution:"<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Bài làm</title>\n</head>\n<body>\n<pre>Một\nHai\nBa</pre>\n<p>Dòng một<br>Dòng hai</p>\n</body>\n</html>",checks:[
+  ['pre có ít nhất 3 dòng',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('pre')&&d.querySelector('pre').textContent.split('\n').filter(function(x){return x.trim()}).length>=3)}],
+  ['Đoạn p có br',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('p br'))}]
+ ]},
+{id:'y7',mount:'y7',no:'Bài tập nhanh',title:'Thuộc tính style',ch:'Sau bài 7',h:230,brief:"<p>Dùng <code>style</code> trực tiếp: <code>h1</code> canh giữa và có màu, <code>p</code> cỡ chữ 18px và có màu nền.</p>",starter:DOC_HEAD+'  <!-- Viết bài làm ở đây -->'+DOC_TAIL,hint:'Làm lần lượt từng dòng yêu cầu bên dưới rồi bấm Kiểm tra.',solution:"<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Bài làm</title>\n</head>\n<body>\n<h1 style=\"text-align:center;color:blue\">Tiêu đề</h1>\n<p style=\"font-size:18px;background-color:#fff4b0\">Đoạn văn.</p>\n</body>\n</html>",checks:[
+  ['h1 canh giữa',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(R(/<h1[^>]*style="[^"]*text-align\s*:\s*center/i))}],
+  ['h1 có màu chữ',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(R(/<h1[^>]*style="[^"]*[^-]color\s*:/i)||R(/<h1[^>]*style="color\s*:/i))}],
+  ['p cỡ chữ 18px',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(R(/<p[^>]*style="[^"]*font-size\s*:\s*18px/i))}],
+  ['p có màu nền',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(R(/<p[^>]*style="[^"]*background(-color)?\s*:/i))}]
+ ]},
+{id:'y8',mount:'y8',no:'Bài tập nhanh',title:'Định dạng văn bản',ch:'Sau bài 8',h:230,brief:"<p>Dùng ít nhất 6 trong các thẻ: <code>b, strong, i, em, mark, small, del, ins, sub, sup</code>.</p>",starter:DOC_HEAD+'  <!-- Viết bài làm ở đây -->'+DOC_TAIL,hint:'Làm lần lượt từng dòng yêu cầu bên dưới rồi bấm Kiểm tra.',solution:"<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Bài làm</title>\n</head>\n<body>\n<p><b>b</b> <strong>strong</strong> <i>i</i> <em>em</em> <mark>mark</mark> <small>small</small> H<sub>2</sub>O x<sup>2</sup></p>\n</body>\n</html>",checks:[
+  ['Có ít nhất 6 thẻ định dạng khác nhau',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(['b','strong','i','em','mark','small','del','ins','sub','sup'].filter(function(x){return h(x)}).length>=6)}]
+ ]},
+{id:'y9',mount:'y9',no:'Bài tập nhanh',title:'Trích dẫn và viết tắt',ch:'Sau bài 9',h:230,brief:"<p>Dùng <code>blockquote</code> có <code>cite</code>, <code>q</code> và <code>abbr</code> có <code>title</code>.</p>",starter:DOC_HEAD+'  <!-- Viết bài làm ở đây -->'+DOC_TAIL,hint:'Làm lần lượt từng dòng yêu cầu bên dưới rồi bấm Kiểm tra.',solution:"<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Bài làm</title>\n</head>\n<body>\n<blockquote cite=\"https://example.com\">Học, học nữa, học mãi.</blockquote>\n<p>Anh ấy nói <q>chào bạn</q>. <abbr title=\"HyperText Markup Language\">HTML</abbr> rất vui.</p>\n</body>\n</html>",checks:[
+  ['blockquote có cite',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('blockquote[cite]'))}],
+  ['Có q',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('q'))}],
+  ['abbr có title',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('abbr[title]'))}]
+ ]},
+{id:'y10',mount:'y10',no:'Bài tập nhanh',title:'Chú thích trong mã',ch:'Sau bài 10',h:230,brief:"<p>Viết ít nhất 2 chú thích, một chú thích chứa thẻ để tạm ẩn nó, và trang vẫn có <code>h1</code>.</p>",starter:DOC_HEAD+'  <!-- Viết bài làm ở đây -->'+DOC_TAIL,hint:'Làm lần lượt từng dòng yêu cầu bên dưới rồi bấm Kiểm tra.',solution:"<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Bài làm</title>\n</head>\n<body>\n<h1>Trang có chú thích</h1>\n<!-- Ghi chú: phần dưới tạm ẩn -->\n<!-- <h2>Mục này bị ẩn</h2> -->\n</body>\n</html>",checks:[
+  ['Có ít nhất 2 chú thích',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!((r.match(/<!--[\s\S]*?-->/g)||[]).length>=2)}],
+  ['Một chú thích chứa thẻ',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(R(/<!--[\s\S]*?<[a-z][\s\S]*?-->/i))}],
+  ['Có h1 hiển thị',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('h1'))}]
+ ]},
+{id:'y11',mount:'y11',no:'Bài tập nhanh',title:'Bốn cách viết màu',ch:'Sau bài 11',h:230,brief:"<p>Tô màu chữ bằng cả bốn cách: tên màu, mã hex, <code>rgb()</code> và <code>hsl()</code>.</p>",starter:DOC_HEAD+'  <!-- Viết bài làm ở đây -->'+DOC_TAIL,hint:'Làm lần lượt từng dòng yêu cầu bên dưới rồi bấm Kiểm tra.',solution:"<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Bài làm</title>\n</head>\n<body>\n<p style=\"color:tomato\">Tên</p>\n<p style=\"color:#3346D6\">Hex</p>\n<p style=\"color:rgb(22,121,76)\">RGB</p>\n<p style=\"color:hsl(280,60%,40%)\">HSL</p>\n</body>\n</html>",checks:[
+  ['Tên màu',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(R(/color\s*:\s*(red|blue|green|tomato|orange|purple|navy|teal|gray|black)/i))}],
+  ['Mã hex',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(R(/color\s*:\s*#[0-9a-f]{3,6}\b/i))}],
+  ['rgb()',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(R(/rgb\(/i))}],
+  ['hsl()',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(R(/hsl\(/i))}]
+ ]},
+{id:'y12',mount:'y12',no:'Bài tập nhanh',title:'CSS nội bộ',ch:'Sau bài 12',h:230,brief:"<p>Dùng thẻ <code>style</code> với selector thẻ (<code>h1</code>), class và id, rồi áp dụng vào trang.</p>",starter:DOC_HEAD+'  <!-- Viết bài làm ở đây -->'+DOC_TAIL,hint:'Làm lần lượt từng dòng yêu cầu bên dưới rồi bấm Kiểm tra.',solution:"<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Bài làm</title>\n</head>\n<body>\n<style>\nh1{color:#3346D6}\n.noi-bat{background:#FFE45C}\n#chan{font-size:14px}\n</style>\n<h1>Tiêu đề</h1>\n<p class=\"noi-bat\">Nổi bật</p>\n<p id=\"chan\">Chân trang</p>\n</body>\n</html>",checks:[
+  ['Selector thẻ h1',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(R(/h1\s*\{/i))}],
+  ['Selector class và có phần tử dùng class',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(R(/\.[\w-]+\s*\{/)&&h('[class]'))}],
+  ['Selector id và có phần tử dùng id',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(R(/#[\w-]+\s*\{/)&&h('[id]'))}]
+ ]},
+{id:'y13',mount:'y13',no:'Bài tập nhanh',title:'Ba kiểu liên kết',ch:'Sau bài 13',h:230,brief:"<p>Tạo liên kết mở tab mới (có <code>rel=\"noopener\"</code>), liên kết <code>mailto:</code> và một bookmark nhảy tới <code>id</code> trong trang.</p>",starter:DOC_HEAD+'  <!-- Viết bài làm ở đây -->'+DOC_TAIL,hint:'Làm lần lượt từng dòng yêu cầu bên dưới rồi bấm Kiểm tra.',solution:"<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Bài làm</title>\n</head>\n<body>\n<a href=\"https://www.example.com\" target=\"_blank\" rel=\"noopener\">Trang ngoài</a>\n<a href=\"mailto:a@example.com\">Gửi thư</a>\n<a href=\"#cuoi\">Xuống cuối</a>\n<h2 id=\"cuoi\">Cuối trang</h2>\n</body>\n</html>",checks:[
+  ['target=_blank kèm rel noopener',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('a[target=_blank][rel~=noopener]'))}],
+  ['Có liên kết mailto',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('a[href^="mailto:"]'))}],
+  ['Bookmark trỏ tới id có thật',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!($$('a[href^="#"]',d).some(function(a){var i=a.getAttribute('href').slice(1);return i&&h('[id="'+i+'"]')}))}]
+ ]},
+{id:'y14',mount:'y14',no:'Bài tập nhanh',title:'Ảnh có chú thích',ch:'Sau bài 14',h:230,brief:"<p>Chèn <code>avatar.svg</code> có <code>alt</code>, <code>width</code>, <code>height</code>, đặt trong <code>figure</code> có <code>figcaption</code>.</p>",starter:DOC_HEAD+'  <!-- Viết bài làm ở đây -->'+DOC_TAIL,hint:'Làm lần lượt từng dòng yêu cầu bên dưới rồi bấm Kiểm tra.',solution:"<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Bài làm</title>\n</head>\n<body>\n<figure>\n<img src=\"avatar.svg\" alt=\"Ảnh đại diện\" width=\"120\" height=\"120\">\n<figcaption>Ảnh đại diện của mình</figcaption>\n</figure>\n</body>\n</html>",checks:[
+  ['img đủ alt, width, height trong figure',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('figure img[alt][width][height]'))}],
+  ['figcaption có chữ',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(t('figcaption').length>2)}]
+ ]},
+{id:'y15',mount:'y15',no:'Bài tập nhanh',title:'Favicon',ch:'Sau bài 15',h:230,brief:"<p>Thêm favicon <code>favicon.svg</code> vào <code>head</code> bằng thẻ <code>link</code>.</p>",starter:DOC_HEAD+'  <!-- Viết bài làm ở đây -->'+DOC_TAIL,hint:'Làm lần lượt từng dòng yêu cầu bên dưới rồi bấm Kiểm tra.',solution:"<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Trang có favicon</title>\n  <link rel=\"icon\" href=\"favicon.svg\" type=\"image/svg+xml\">\n</head>\n<body>\n  <h1>Xem biểu tượng trên tab</h1>\n</body>\n</html>",checks:[
+  ['Có link rel icon trong head',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(h('head link[rel~=icon][href]'))}],
+  ['href trỏ tới favicon.svg',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(/favicon\.svg/.test(d.querySelector('link[rel~=icon]')?d.querySelector('link[rel~=icon]').getAttribute('href'):''))}]
+ ]},
+{id:'y16',mount:'y16',no:'Bài tập nhanh',title:'Tiêu đề trang',ch:'Sau bài 16',h:230,brief:"<p>Đặt <code>title</code> dạng \"Tên trang | Tên website\" (10 đến 60 ký tự) và một <code>h1</code> có nội dung khác title.</p>",starter:DOC_HEAD+'  <!-- Viết bài làm ở đây -->'+DOC_TAIL,hint:'Làm lần lượt từng dòng yêu cầu bên dưới rồi bấm Kiểm tra.',solution:"<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Cách luộc trứng | Bếp Nhà Mình</title>\n</head>\n<body>\n  <h1>Cách luộc trứng lòng đào</h1>\n</body>\n</html>",checks:[
+  ['title từ 10 đến 60 ký tự',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(d.title.trim().length>=10&&d.title.trim().length<=60)}],
+  ['title có dấu |',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(d.title.indexOf('|')>0)}],
+  ['Có h1 khác title',function(d,r){var n=function(s){return $$(s,d).length},t=function(s){return txt(d.querySelector(s))},h=function(s){return !!d.querySelector(s)},R=function(x){return x.test(r)},U=function(a){return a.filter(function(v,i){return a.indexOf(v)===i}).length},LN=function(g,w,o){return r.split('\n').some(function(l){l=l.toLowerCase();return l.indexOf(g)>=0&&l.indexOf(w)>=0&&l.indexOf(o)<0})};return !!(t('h1').length>2&&t('h1')!==d.title.trim())}]
+ ]},
+];
+
+function updateExProgress(){
+  var n=EX.filter(function(x){return store.get('h1:done:'+x.id)==='1'}).length;
+  $('#exProgress').textContent='Đã hoàn thành '+n+'/'+EX.length+' bài tập';
+}
+function buildExercises(){
+  EX.forEach(function(ex,i){
+    var list=(ex.mount&&$('[data-exmount="'+ex.mount+'"]'))||$('#exList');
+    var key='h1:code:'+ex.id, dkey='h1:done:'+ex.id;
+    var saved=store.get(key);
+    var sb=sandbox(saved!==null?saved:ex.starter,{h:ex.h||260,reset:false});
+    var box=document.createElement('article'); box.className='ex'; box.id=ex.id;
+    box.innerHTML='<header class="ex-head"><h3><span class="ex-no">'+(ex.no||('Bài '+(i+1)))+'</span>'+esc(ex.title)+'</h3><p class="ex-ch">'+esc(ex.ch)+'</p></header>'
+      +'<div class="ex-body"><div class="ex-brief">'+ex.brief+'</div><div class="ex-slot"></div>'
+      +'<p><strong>Yêu cầu cần đạt</strong></p><ul class="checks">'+ex.checks.map(function(c){return '<li><span class="ck" aria-hidden="true">•</span><span>'+esc(c[0])+'</span></li>'}).join('')+'</ul>'
+      +'<div class="btns"><button type="button" class="btn primary" data-a="check">Kiểm tra</button><button type="button" class="btn" data-a="hint">Gợi ý</button><button type="button" class="btn" data-a="reset">Làm lại từ đầu</button></div>'
+      +'<p class="result" role="status"></p><div class="hint" hidden></div>'
+      +'<details class="sol"><summary>Xem lời giải mẫu (hãy tự thử trước)</summary><div class="sol-body"></div></details></div>';
+    $('.ex-slot',box).appendChild(sb.el);
+    var solBody=$('.sol-body',box); var noSol=!ex.solution; if(noSol) ex.solution='';
+    solBody.appendChild(codeBlock(ex.solution,'html','Đây chỉ là một cách làm. Mọi mã thoả các yêu cầu đều đúng.'));
+    var use=document.createElement('button'); use.type='button'; use.className='btn'; use.textContent='Đưa lời giải vào khung soạn mã'; solBody.appendChild(use);
+    var lis=$$('.checks li',box), result=$('.result',box), hint=$('.hint',box);
+    function paintDone(){ if(store.get(dkey)==='1'){result.textContent='Bạn đã hoàn thành bài này.'; result.className='result done'} }
+    function run(){
+      var raw=sb.value, d=new DOMParser().parseFromString(raw,'text/html'), pass=0;
+      ex.checks.forEach(function(c,k){
+        var ok=false; try{ok=!!c[1](d,raw)}catch(e){ok=false}
+        lis[k].className=ok?'ok':'no';
+        $('.ck',lis[k]).textContent=ok?'✓':'✗';
+        lis[k].setAttribute('aria-label',(ok?'Đạt: ':'Chưa đạt: ')+c[0]);
+        if(ok) pass++;
+      });
+      if(pass===ex.checks.length){store.set(dkey,'1'); result.textContent='Hoàn thành: đạt '+pass+'/'+ex.checks.length+' yêu cầu. Làm tốt lắm.'; result.className='result done'}
+      else{store.del(dkey); result.textContent='Đạt '+pass+'/'+ex.checks.length+' yêu cầu. Xem các dòng có dấu ✗ và sửa tiếp.'; result.className='result'}
+      updateExProgress();
+    }
+    box.addEventListener('click',function(e){
+      var b=e.target.closest('button[data-a]'); if(!b) return;
+      var a=b.getAttribute('data-a');
+      if(a==='check') run();
+      if(a==='hint'){hint.textContent=ex.hint; hint.hidden=!hint.hidden}
+      if(a==='reset'){
+        sb.value=ex.starter; store.del(key); store.del(dkey);
+        lis.forEach(function(li){li.className=''; $('.ck',li).textContent='•'; li.removeAttribute('aria-label')});
+        result.textContent=''; result.className='result'; updateExProgress();
+      }
+    });
+    use.addEventListener('click',function(){sb.value=ex.solution}); if(noSol) $('details.sol',box).remove(); 
+    sb.el.addEventListener('codechange',function(){store.set(key,sb.value)});
+    list.appendChild(box);
+    sb.render(); paintDone();
+  });
+  updateExProgress();
+}
+buildExercises();
+
+var lastP='';
+function allProg(){var d=EX.filter(function(x){return store.get('h1:done:'+x.id)==='1'}).length,q=store.get('h1:qbest');
+  var h='Tiến độ: đã hoàn thành <strong>'+d+'/'+EX.length+'</strong> bài tập'+(q!==null?', điểm trắc nghiệm cao nhất <strong>'+q+'%</strong>':'')+'. <button type="button" class="mini" id="resetAll">Xoá tiến độ</button>';
+  var e=$('#allProg'); if(e&&h!==lastP){e.innerHTML=h; lastP=h}}
+allProg(); setInterval(allProg,1500);
+document.addEventListener('click',function(e){if(e.target.id==='resetAll'&&confirm('Xoá toàn bộ tiến độ và mã đã lưu?')){EX.forEach(function(x){store.del('h1:done:'+x.id);store.del('h1:code:'+x.id)});store.del('h1:qbest');location.reload()}});
+$$('[data-count="quiz"]').forEach(function(e){e.textContent=QUIZ.length});
+$$('[data-count="ex"]').forEach(function(e){e.textContent=EX.length});
+})();
+</script>
+</body>
+</html>

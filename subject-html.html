@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Học HTML — HocOS</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F7FB;--surface:#FFFFFF;--ink:#1B2433;--muted:#556178;--line:#D9E0EC;--accent:#3346D6;--accent-ink:#FFFFFF;--accent-soft:#E6E9FB;--ok:#16794C;--ok-bg:#E3F4EB;--font-ui:"Be Vietnam Pro",system-ui,sans-serif;--font-code:"JetBrains Mono",monospace;}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1424;--surface:#141D33;--ink:#E6ECF8;--muted:#9AA7C0;--line:#26314D;--accent:#8FA2FF;--accent-ink:#0D1424;--accent-soft:#1E2A52;--ok:#5FD39A;--ok-bg:#0F2A20;}}
+:root[data-theme="dark"]{--bg:#0D1424;--surface:#141D33;--ink:#E6ECF8;--muted:#9AA7C0;--line:#26314D;--accent:#8FA2FF;--accent-ink:#0D1424;--accent-soft:#1E2A52;--ok:#5FD39A;--ok-bg:#0F2A20;}
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
+body{margin:0;background:radial-gradient(1000px 550px at 90% -10%,var(--accent-soft),transparent 60%),var(--bg);color:var(--ink);font-family:var(--font-ui)}
+.wrap{max-width:1000px;margin:0 auto;padding:44px 22px 90px}
+.hero{padding:6px 0 8px}
+.hero .tag{display:inline-block;padding:5px 14px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:.78rem}
+.hero h1{font-size:clamp(1.9rem,5vw,2.8rem);font-weight:800;letter-spacing:-.02em;margin:.5rem 0 .3rem}
+.hero p{color:var(--muted);max-width:60ch;font-size:1.02rem;line-height:1.6;margin:0}
+.stages{display:flex;flex-direction:column;gap:16px;margin-top:34px}
+.stage{position:relative;display:flex;gap:18px;align-items:flex-start;text-decoration:none;color:inherit;border-radius:16px;padding:20px 22px;background:var(--surface);border:1px solid var(--line);box-shadow:0 10px 30px -20px rgba(20,30,60,.35);transition:transform .15s,border-color .15s}
+.stage:hover{transform:translateY(-3px);border-color:var(--accent)}
+.stage.locked{opacity:.55;cursor:not-allowed}
+.stage.locked:hover{transform:none;border-color:var(--line)}
+.stage .num{flex:none;width:2.6rem;height:2.6rem;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font:800 1.1rem var(--font-ui)}
+.stage .body{flex:1;min-width:0}
+.stage h3{margin:0 0 4px;font-size:1.15rem}
+.stage p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.55}
+.stage .meta{margin-top:10px;display:flex;gap:12px;font:600 .76rem var(--font-code);color:var(--muted)}
+.bar{height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:10px;max-width:220px}
+.bar i{display:block;height:100%;background:var(--accent);width:8%;transition:width .4s}
+.check{margin-top:10px;display:flex;align-items:center;gap:8px;font:600 .78rem var(--font-ui);color:var(--muted)}
+.check input{width:1rem;height:1rem;accent-color:var(--accent)}
+.go{position:absolute;right:20px;top:20px;font-weight:700;color:var(--accent);opacity:0;transition:opacity .15s}
+.stage:hover .go{opacity:1}
+.foot{text-align:center;margin-top:50px;color:var(--muted);font-size:.85rem}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="hocosBar" style="position:sticky;top:env(safe-area-inset-top,0);z-index:40;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 18px;background:var(--surface);border-bottom:1px solid var(--line);font:500 .85rem var(--font-ui,sans-serif);color:var(--muted)">
+<a data-nav href="https://claude.ai/artifact/D8wS3zGcy5E53XYhR4JxGj" style="font-weight:800;color:var(--ink);text-decoration:none">🖥️ HocOS</a><span style="opacity:.5">›</span><span style="color:var(--ink);font-weight:700">📁 Học HTML</span>
+  <span id="hocosClock" style="margin-left:auto;font-family:var(--font-code,monospace);color:var(--ink)"></span>
+  <button id="hocosThemeBtn" title="Đổi giao diện sáng/tối" style="border:1px solid var(--line);background:var(--surface);color:var(--ink);width:2rem;height:2rem;border-radius:8px;cursor:pointer;font-size:.9rem">🌗</button>
+  <button id="hocosCmdBtn" title="Tìm nhanh (Ctrl K)" style="border:1px solid var(--line);background:var(--surface);color:var(--ink);width:2rem;height:2rem;border-radius:8px;cursor:pointer;font-size:.9rem">⌘</button>
+</div>
+<div id="hocosCmdOverlay" style="position:fixed;inset:0;background:rgba(10,15,30,.55);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;padding-top:12vh;z-index:999">
+  <div style="width:min(560px,92vw);background:var(--surface);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);border:1px solid var(--line)">
+    <input id="hocosCmdInput" placeholder="Gõ tên bài học, giai đoạn hoặc môn học…" style="width:100%;box-sizing:border-box;border:0;padding:16px 18px;font:500 1rem var(--font-ui,sans-serif);background:transparent;color:var(--ink);outline:none;border-bottom:1px solid var(--line)">
+    <div id="hocosCmdList" style="max-height:50vh;overflow:auto;padding:6px"></div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="hero">
+    <span class="tag">MÔN HỌC</span>
+    <h1>📁 Học HTML</h1>
+    <p>Lộ trình HTML được chia thành nhiều giai đoạn, học từ nền tảng đến nâng cao. Chọn một giai đoạn để bắt đầu — tiến độ được lưu ngay trên trình duyệt của bạn.</p>
+  </div>
+  <div class="stages">
+    <a class="stage" data-nav href="https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9">
+      <span class="go">Mở →</span>
+      <span class="num">1</span>
+      <span class="body">
+        <h3>HTML nền tảng</h3>
+        <p>Cấu trúc trang, thẻ, thuộc tính, định dạng văn bản, liên kết, hình ảnh, favicon và tiêu đề trang.</p>
+        <span class="meta"><span>⏱ 2 tuần</span><span>📘 17 bài</span><span>✅ 8 bài tập</span></span>
+        <label class="check"><input type="checkbox" data-app="s1"> Đánh dấu đã hoàn thành</label>
+        <span class="bar"><i id="bar-s1"></i></span>
+      </span>
+    </a>
+    <a class="stage" data-nav href="https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg">
+      <span class="go">Mở →</span>
+      <span class="num">2</span>
+      <span class="body">
+        <h3>HTML nâng cao</h3>
+        <p>Bảng, danh sách, bố cục ngữ nghĩa, thiết kế đáp ứng, biểu mẫu — khép lại bằng dự án Trang CV.</p>
+        <span class="meta"><span>⏱ 2 tuần</span><span>📗 21 chương</span><span>🧩 Dự án CV</span></span>
+        <label class="check"><input type="checkbox" data-app="s2"> Đánh dấu đã hoàn thành</label>
+        <span class="bar"><i id="bar-s2"></i></span>
+      </span>
+    </a>
+    <div class="stage locked" title="Sắp ra mắt">
+      <span class="num">3</span>
+      <span class="body">
+        <h3>HTML nâng cao hơn (sắp ra mắt)</h3>
+        <p>Đa phương tiện, API mới của HTML5, tối ưu SEO và khả năng truy cập nâng cao.</p>
+        <span class="meta"><span>🔒 Đang biên soạn</span></span>
+      </span>
+    </div>
+  </div>
+  <p class="foot">Đây là 1 trong nhiều môn học của HocOS. <a data-nav href="https://claude.ai/artifact/D8wS3zGcy5E53XYhR4JxGj" style="color:var(--accent);font-weight:700;text-decoration:none">← Xem tất cả môn học</a></p>
+</div>
+<script>
+(function(){
+var g=function(k){try{return localStorage.getItem(k)}catch(e){return null}};
+var s=function(k,v){try{localStorage.setItem(k,v)}catch(e){}};
+var qs=new URLSearchParams(location.search);
+if(qs.get('theme')!==null) s('hocos:theme', qs.get('theme'));
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t||'')}
+applyTheme(g('hocos:theme'));
+function withTheme(url){
+  var t=g('hocos:theme'); if(t===null||t==='') return url;
+  var hashIdx=url.indexOf('#'); var base=hashIdx>-1?url.slice(0,hashIdx):url; var hash=hashIdx>-1?url.slice(hashIdx):'';
+  var sep= base.indexOf('?')>-1 ? '&':'?';
+  return base+sep+'theme='+encodeURIComponent(t)+hash;
+}
+function syncLinks(){document.querySelectorAll('a[data-nav]').forEach(function(a){if(!a.dataset.orig) a.dataset.orig=a.getAttribute('href'); a.setAttribute('href', withTheme(a.dataset.orig))})}
+syncLinks();
+document.getElementById('hocosThemeBtn').onclick=function(){
+  var cur=g('hocos:theme'); var next= cur==='dark'?'light':(cur==='light'?'':'dark');
+  s('hocos:theme',next); applyTheme(next); syncLinks();
+};
+function tick(){var el=document.getElementById('hocosClock'); if(el) el.textContent=new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})}
+tick(); setInterval(tick,15000);
+
+var DIR = [{"label": "🖥️ Trang chủ HocOS", "url": "https://claude.ai/artifact/D8wS3zGcy5E53XYhR4JxGj", "tag": "HỆ THỐNG"}, {"label": "📁 Học HTML (môn học)", "url": "https://claude.ai/artifact/Gq5CKmfD3EU7AAmkb9f7hR", "tag": "MÔN HỌC"}, {"label": "Giai đoạn 1 — HTML nền tảng", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9", "tag": "HTML"}, {"label": "Giai đoạn 2 — HTML nâng cao", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg", "tag": "HTML"}, {"label": "HTML là gì và công cụ", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c1", "tag": "G1"}, {"label": "Cấu trúc trang HTML cơ bản", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c2", "tag": "G1"}, {"label": "Phần tử HTML", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c3", "tag": "G1"}, {"label": "Thuộc tính HTML", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c4", "tag": "G1"}, {"label": "Tiêu đề", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c5", "tag": "G1"}, {"label": "Đoạn văn", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c6", "tag": "G1"}, {"label": "Thuộc tính style", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c7", "tag": "G1"}, {"label": "Định dạng văn bản", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c8", "tag": "G1"}, {"label": "Trích dẫn và viết tắt", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c9", "tag": "G1"}, {"label": "Chú thích", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c10", "tag": "G1"}, {"label": "Màu sắc", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c11", "tag": "G1"}, {"label": "CSS trong HTML", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c12", "tag": "G1"}, {"label": "Liên kết", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c13", "tag": "G1"}, {"label": "Hình ảnh", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c14", "tag": "G1"}, {"label": "Favicon", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c15", "tag": "G1"}, {"label": "Tiêu đề trang", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c16", "tag": "G1"}, {"label": "Tổng kết và tra cứu nhanh", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#c17", "tag": "G1"}, {"label": "Trắc nghiệm — Giai đoạn 1", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#quiz", "tag": "G1"}, {"label": "Bài tập vận dụng — Giai đoạn 1", "url": "https://claude.ai/artifact/3jSMFmFXSu4xSdYMBYePY9#bai-tap", "tag": "G1"}, {"label": "Bảng", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c1", "tag": "G2"}, {"label": "Danh sách", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c2", "tag": "G2"}, {"label": "Phần tử block & inline", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c3", "tag": "G2"}, {"label": "Thẻ div", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c4", "tag": "G2"}, {"label": "Lớp (class)", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c5", "tag": "G2"}, {"label": "Định danh (id)", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c6", "tag": "G2"}, {"label": "Nút bấm", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c7", "tag": "G2"}, {"label": "Khung nhúng iframe", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c8", "tag": "G2"}, {"label": "Đường dẫn file", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c9", "tag": "G2"}, {"label": "Phần head", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c10", "tag": "G2"}, {"label": "Bố cục trang", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c11", "tag": "G2"}, {"label": "Thiết kế đáp ứng", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c12", "tag": "G2"}, {"label": "Thẻ ngữ nghĩa", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c13", "tag": "G2"}, {"label": "Quy ước viết code", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c14", "tag": "G2"}, {"label": "Ký tự đặc biệt", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c15", "tag": "G2"}, {"label": "Bảng mã ký tự", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c16", "tag": "G2"}, {"label": "Biểu mẫu", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c17", "tag": "G2"}, {"label": "Thuộc tính của form", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c18", "tag": "G2"}, {"label": "Các phần tử trong form", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c19", "tag": "G2"}, {"label": "Các loại input", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c20", "tag": "G2"}, {"label": "Thuộc tính của input", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c21", "tag": "G2"}, {"label": "Dự án: Trang CV", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#c22", "tag": "G2"}, {"label": "Trắc nghiệm — Giai đoạn 2", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#quiz", "tag": "G2"}, {"label": "Bài tập vận dụng — Giai đoạn 2", "url": "https://claude.ai/artifact/E8bSQqXVyRMScnEG8TABAg#bai-tap", "tag": "G2"}];
+var ov=document.getElementById('hocosCmdOverlay'), inp=document.getElementById('hocosCmdInput'), list=document.getElementById('hocosCmdList');
+function openCmd(){ov.style.display='flex'; inp.value=''; render(DIR); inp.focus()}
+function closeCmd(){ov.style.display='none'}
+function render(arr){ list.innerHTML= arr.slice(0,40).map(function(x,k){return '<div class="hocos-ci" data-url="'+withTheme(x.url)+'" style="display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:.92rem;'+(k===0?'background:var(--accent-soft);':'')+'"><span>'+x.label+'</span><span style="color:var(--muted);font:600 .72rem var(--font-code,monospace)">'+x.tag+'</span></div>'}).join('') || '<div style="padding:10px">Không tìm thấy</div>';}
+inp.addEventListener('input',function(){var q=inp.value.trim().toLowerCase(); render(!q?DIR:DIR.filter(function(x){return x.label.toLowerCase().indexOf(q)>-1}))});
+list.addEventListener('click',function(e){var it=e.target.closest('[data-url]'); if(it) location.href=it.getAttribute('data-url')});
+document.getElementById('hocosCmdBtn').onclick=openCmd;
+ov.addEventListener('click',function(e){if(e.target===ov) closeCmd()});
+document.addEventListener('keydown',function(e){
+ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault(); ov.style.display==='flex'?closeCmd():openCmd()}
+ if(e.key==='Escape') closeCmd();
+});
+})();
+</script>
+<script>
+(function(){
+var g=function(k){try{return localStorage.getItem(k)}catch(e){return null}};
+var s=function(k,v){try{localStorage.setItem(k,v)}catch(e){}};
+['s1','s2'].forEach(function(id){
+  var cb=document.querySelector('[data-app="'+id+'"]'), bar=document.getElementById('bar-'+id);
+  cb.checked = g('hocos:done:'+id)==='1';
+  bar.style.width = cb.checked?'100%':'8%';
+  cb.addEventListener('click',function(e){e.stopPropagation();e.preventDefault();
+    cb.checked=!cb.checked;
+    s('hocos:done:'+id, cb.checked?'1':'0');
+    bar.style.width = cb.checked?'100%':'8%';
+  });
+});
+document.querySelectorAll('.stage.locked').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();alert('Giai đoạn này đang được biên soạn, sẽ sớm ra mắt!')})});
+})();
+</script>
+</body>
+</html>
